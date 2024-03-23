@@ -1,4 +1,4 @@
-package com.example.application;
+package br.com.bibliotec;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;

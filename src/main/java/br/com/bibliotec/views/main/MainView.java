@@ -1,4 +1,4 @@
-package com.example.application.views.main;
+package br.com.bibliotec.views.main;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;

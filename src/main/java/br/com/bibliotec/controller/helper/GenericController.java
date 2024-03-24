@@ -23,7 +23,7 @@ public class GenericController<T, I, R extends JpaRepository<T, I>> {
     protected void afterExecute(T entity, Mode mode) throws BibliotecException {}
 
     public List<T> list() {
-        return repository.findAll().reversed();
+        return repository.findAll();
     }
 
     public T save(T entity) throws BibliotecException {

@@ -21,7 +21,7 @@ public class Book {
     private String author;
     
     @Column(name = "image", columnDefinition = "mediumblob")
-    private byte[] imagem;
+    private byte[] image;
 
     @Length(max = 1000)
     @Column(name = "synopsis",length = 1000)
@@ -51,12 +51,12 @@ public class Book {
         this.author = author;
     }
     
-    public byte[] getImagem() {
-        return imagem;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setImagem(byte[] imagem) {
-        this.imagem = imagem;
+    public void setImage(byte[] imagem) {
+        this.image = imagem;
     }
 
     public String getSynopsis() {

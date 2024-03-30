@@ -7,14 +7,22 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class BookForm extends Dialog {
     
@@ -22,11 +30,11 @@ public class BookForm extends Dialog {
 
     private final TextField txtAuthor;
 
-    private final TextField txtsynopsis;
+    private final TextArea txtsynopsis;
     
     private final BookController controller;
     
-    private FormLayout formLayout;
+    private final FormLayout formLayout;
 
     private boolean isNew;
     
@@ -39,24 +47,39 @@ public class BookForm extends Dialog {
     private Dialog deleteDialog;
 
     private  Button deleteButton;
+    
+    private Upload upload;
 
     private final BeanValidationBinder<Book> binder;
     
     public BookForm(@Autowired BookController controller) {
         this.controller = controller;
         this.formLayout = new FormLayout();
+        formLayout.setMaxWidth("500px");
         this.currentBook = new Book();
         
         binder = new BeanValidationBinder<>(Book.class);
         
+        createImageInput();
+        
         txtTitle = new TextField("Título");
         txtAuthor = new TextField("Autor");
-        txtsynopsis = new TextField("Sinopse");
+        txtsynopsis = new TextArea("Sinopse");
         
         binder.forField(txtTitle).bind("title");
         binder.forField(txtAuthor).bind("author");
         binder.forField(txtsynopsis).bind("synopsis");
 
+        createButtons();
+        
+        formLayout.add(upload, txtTitle, txtAuthor, txtsynopsis);
+        createDeleteDialog();
+        add(formLayout);
+
+        setNewBean();
+    }
+
+    private void createButtons() {
         HorizontalLayout displayButtons = new HorizontalLayout();
         addOpenedChangeListener(dialog -> {
             if (isNew) {
@@ -70,15 +93,33 @@ public class BookForm extends Dialog {
             }
         });
         createDialogButtons();
-        
+
         displayButtons.add(saveButton);
-
-        formLayout.add(txtTitle, txtAuthor, txtsynopsis);
-        createDeleteDialog();
-        add(formLayout);
-
         getFooter().add(displayButtons);
-        setNewBean();
+    }
+
+    private void createImageInput() {
+        MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
+        upload = new Upload(buffer);
+        
+        Span label = new Span("Adicione a imagem do livro aqui.");
+        label.getStyle().set("vertical-align", "bottom");
+        upload.setDropLabel(label);
+        
+        upload.setUploadButton(new Button("Adicionar imagem"));
+        upload.setMaxFiles(1);
+
+        upload.addSucceededListener(event -> {
+            String fileName = event.getFileName();
+            InputStream inputStream = buffer.getInputStream(fileName);
+
+            try {
+                currentBook.setImage(inputStream.readAllBytes());
+            } catch (IOException error) {
+                Notification.show("Erro ao adicionar imagem.").addThemeVariants(NotificationVariant.LUMO_ERROR);
+                error.printStackTrace();
+            }
+        });
     }
 
     private void createDialogButtons() {
@@ -87,8 +128,9 @@ public class BookForm extends Dialog {
         saveButton.addClickListener(click -> {
             try {
                 handleSaveButton();
-            } catch (BibliotecException e) {
-                throw new RuntimeException(e);
+            } catch (BibliotecException error) {
+                Notification.show("Erro ao salver item.").addThemeVariants(NotificationVariant.LUMO_ERROR);
+                error.printStackTrace();
             }
         });
 
@@ -124,8 +166,9 @@ public class BookForm extends Dialog {
             controller.delete(currentBook);
             deleteDialog.close();
             close();
-        } catch (BibliotecException e){
+        } catch (BibliotecException error){
             Notification.show("Erro ao deletar item.");
+            error.printStackTrace();
         }
     }
 
@@ -166,4 +209,11 @@ public class BookForm extends Dialog {
         this.isNew = true;
     }
     
+    public Button getSaveButton() {
+        return saveButton;
+    }
+    
+    public Button getConfirmButton() {
+        return confirmButton;
+    }
 }

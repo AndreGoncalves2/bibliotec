@@ -2,6 +2,7 @@ package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -52,7 +53,10 @@ public class BookForm extends Dialog {
 
     private final BeanValidationBinder<Book> binder;
     
-    public BookForm(@Autowired BookController controller) {
+    private final RefreshListener refreshListener;
+    
+    public BookForm(@Autowired BookController controller, RefreshListener refreshListener) {
+        this.refreshListener = refreshListener;
         this.controller = controller;
         this.formLayout = new FormLayout();
         formLayout.setMaxWidth("500px");
@@ -165,6 +169,7 @@ public class BookForm extends Dialog {
         try {
             controller.delete(currentBook);
             deleteDialog.close();
+            refreshListener.refresh();
             close();
         } catch (BibliotecException error){
             Notification.show("Erro ao deletar item.");
@@ -183,6 +188,7 @@ public class BookForm extends Dialog {
                     controller.update(currentBook);
                 }
                 resetBinder();
+                refreshListener.refresh();
                 close();
             }
 

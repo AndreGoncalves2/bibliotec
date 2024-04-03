@@ -1,6 +1,7 @@
 package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.MainView;
 import com.vaadin.flow.component.button.Button;
@@ -24,7 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @Route(value = "", layout = MainView.class)
-public class BookGrid extends VerticalLayout {
+public class BookGrid extends VerticalLayout implements RefreshListener {
     
     private final BookController bookController;
     
@@ -47,7 +48,7 @@ public class BookGrid extends VerticalLayout {
     public BookGrid(@Autowired BookController bookController) {
         
         this.bookController = bookController;
-        bookFormDialog = new BookForm(bookController);
+        bookFormDialog = new BookForm(bookController, this);
         
         title = new H1("Livros");
 
@@ -96,7 +97,7 @@ public class BookGrid extends VerticalLayout {
                 
                 refreshGrid(filteredBooks);
             } else {
-                refreshGrid();
+                refresh();
             }
         });
         
@@ -108,7 +109,7 @@ public class BookGrid extends VerticalLayout {
         
         grid = new Grid<>();
         grid.addComponentColumn(book -> {
-            if(book.getImage().length > 1 ) {
+            if(book.getImage() != null && book.getImage().length > 1) {
                 StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));
                 Image image = new Image(resource, "Book image");
                 image.setWidth("30px");
@@ -123,8 +124,7 @@ public class BookGrid extends VerticalLayout {
         grid.addColumn(Book::getAuthor).setHeader("Autor").setWidth("20%");
         grid.addColumn(Book::getSynopsis).setHeader("Sinopse").setWidth("50%");
 
-        refreshGrid();
-        addRefreshOnForm();
+        refresh();
     }
 
     private static Div createEmptyImage() {
@@ -133,18 +133,14 @@ public class BookGrid extends VerticalLayout {
         emptyImage.setHeight("45px");
         return emptyImage;
     }
-
-    protected void refreshGrid() {
-        listAllBooks = bookController.list().reversed();
-        grid.setDataProvider(DataProvider.ofCollection(listAllBooks));
-    }
-
+    
     protected void refreshGrid(List<Book> listBooks) {
         grid.setDataProvider(DataProvider.ofCollection(listBooks));
     }
 
-    private void addRefreshOnForm() {
-        bookFormDialog.getConfirmButton().addClickListener(click -> refreshGrid());
-        bookFormDialog.getSaveButton().addClickListener(click -> refreshGrid());
+    @Override
+    public void refresh() {
+        listAllBooks = bookController.list().reversed();
+        grid.setDataProvider(DataProvider.ofCollection(listAllBooks));
     }
 }

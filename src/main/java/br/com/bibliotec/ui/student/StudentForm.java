@@ -1,104 +1,95 @@
-package br.com.bibliotec.ui.book;
+package br.com.bibliotec.ui.student;
 
 import br.com.bibliotec.anotation.Bind;
-import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.controller.StudentController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.listener.RefreshListener;
-import br.com.bibliotec.model.Book;
+import br.com.bibliotec.model.Student;
 import br.com.bibliotec.ui.helper.Binder;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.io.InputStream;
+public class StudentForm extends Dialog {
+    
+    @Bind("ra")
+    public TextField txtRa;
+    
+    @Bind("name")
+    public TextField txtName;
 
-public class BookForm extends Dialog {
-    
-    @Bind("code")
-    private final TextField txtCode; 
-    
-    @Bind("title")
-    private final TextField txtTitle;
+    @Bind("studentClass")
+    public TextField txtStudentClass;
 
-    @Bind("author")
-    private final TextField txtAuthor;
+    private final StudentController controller;
 
-    @Bind("synopsis")
-    private final TextArea txtsynopsis;
-    
-    private final BookController controller;
-    
     private final FormLayout formLayout;
 
     private boolean isNew;
-    
-    private  Button confirmButton;
-    
+
+    private Button confirmButton;
+
     private Button saveButton;
-    
-    private Book currentBook;
+
+    private Student currentStudent;
 
     private Dialog deleteDialog;
 
     private  Button deleteButton;
-    
-    private Upload upload;
 
-    private final Binder<Book> binder;
-    
+    private final Binder<Student> binder;
+
     private final RefreshListener refreshListener;
-    
-    public BookForm(@Autowired BookController controller, RefreshListener refreshListener) throws IllegalAccessException {
+
+    public StudentForm(StudentController controller, RefreshListener refreshListener) throws IllegalAccessException {
         this.refreshListener = refreshListener;
         this.controller = controller;
         this.formLayout = new FormLayout();
+        
+        binder = new Binder<>(Student.class, this);
+        
         formLayout.setMaxWidth("500px");
-        this.currentBook = new Book();
 
-        binder = new Binder<>(Book.class, this);
+        txtRa = new TextField("RA");
+        txtRa.setAllowedCharPattern("[0-9]");
+        txtRa.setMinLength(10);
+        txtRa.setMaxLength(10);
         
-        createImageInput();
-        
-        txtCode = new TextField("Código");
-        txtCode.setAllowedCharPattern("[0-9/\\-.]");
+        txtName = new TextField("Nome");
+        txtStudentClass = new TextField("Turma");
 
-        txtTitle = new TextField("Título");
-        txtAuthor = new TextField("Autor");
-        txtsynopsis = new TextArea("Sinopse");
         
-        binder.createBean();
-
         createButtons();
-        
-        formLayout.add(upload, txtCode, txtTitle, txtAuthor, txtsynopsis);
+
+        formLayout.add(txtRa, txtName, txtStudentClass);
         createDeleteDialog();
         add(formLayout);
-    }
 
+        setNewBean();
+
+        addOpenedChangeListener(event -> txtRa.setReadOnly(!isNew));
+        binder.createBean();
+        
+    }
+    
     private void createButtons() {
         HorizontalLayout displayButtons = new HorizontalLayout();
         addOpenedChangeListener(dialog -> {
             if (isNew) {
                 saveButton.setText("Salvar");
-                setHeaderTitle("Novo livro");
+                setHeaderTitle("Novo Aluno");
                 displayButtons.remove(deleteButton);
             } else {
                 saveButton.setText("Atualizar");
-                setHeaderTitle("Editar livro");
+                setHeaderTitle("Editar Aluno");
                 displayButtons.add(deleteButton);
             }
         });
@@ -107,30 +98,8 @@ public class BookForm extends Dialog {
         displayButtons.add(saveButton);
         getFooter().add(displayButtons);
     }
+    
 
-    private void createImageInput() {
-        MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
-        upload = new Upload(buffer);
-        
-        Span label = new Span("Adicione a imagem do livro aqui.");
-        label.getStyle().set("vertical-align", "bottom");
-        upload.setDropLabel(label);
-        
-        upload.setUploadButton(new Button("Adicionar imagem"));
-        upload.setMaxFiles(1);
-
-        upload.addSucceededListener(event -> {
-            String fileName = event.getFileName();
-            InputStream inputStream = buffer.getInputStream(fileName);
-
-            try {
-                currentBook.setImage(inputStream.readAllBytes());
-            } catch (IOException error) {
-                Notification.show("Erro ao adicionar imagem.").addThemeVariants(NotificationVariant.LUMO_ERROR);
-                error.printStackTrace();
-            }
-        });
-    }
 
     private void createDialogButtons() {
 
@@ -173,7 +142,7 @@ public class BookForm extends Dialog {
 
     private void deleteAndClose() {
         try {
-            controller.delete(currentBook);
+            controller.delete(currentStudent);
             deleteDialog.close();
             refreshListener.refresh();
             close();
@@ -184,16 +153,17 @@ public class BookForm extends Dialog {
     }
 
     public void handleSaveButton() throws BibliotecException, ValidationException {
-        binder.writeBean(currentBook);
+
+        binder.writeBean(currentStudent);
 
         if (binder.isValid()) {
             try {
-                if (currentBook.getId() == null) {
-                    controller.save(currentBook);
+                if (currentStudent.getId() == null) {
+                    controller.save(currentStudent);
                 } else {
-                    controller.update(currentBook);
+                    controller.update(currentStudent);
                 }
-
+                
                 resetBinder();
                 refreshListener.refresh();
                 close();
@@ -209,14 +179,14 @@ public class BookForm extends Dialog {
         setNewBean();
     }
 
-    public void setBinder(Book entity) {
-        this.currentBook = entity;
+    public void setBinder(Student entity) {
+        this.currentStudent = entity;
         binder.readBean(entity);
         this.isNew = false;
     }
 
     public void setNewBean() {
-        this.currentBook = new Book();
+        this.currentStudent = new Student();
         binder.readBean(null);
         this.isNew = true;
     }

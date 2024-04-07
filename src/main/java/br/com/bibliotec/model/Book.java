@@ -2,6 +2,7 @@ package br.com.bibliotec.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 @Table
@@ -12,6 +13,10 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    
+    @NotNull
+    @Column(name = "code", updatable = false)
+    private String code;
     
     @NotBlank
     @Column(name = "title", length = 100)
@@ -33,6 +38,14 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String id) {
+        this.code = id;
     }
 
     public String getTitle() {
@@ -65,5 +78,14 @@ public class Book {
 
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "code=" + code +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }

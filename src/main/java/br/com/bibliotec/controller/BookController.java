@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BookController extends GenericController<Book, Long, BookRepository> {
+public class BookController extends GenericController<Book, Integer, BookRepository> {
     
     public BookController(@Autowired BookRepository bookRepository) {
         this.repository = bookRepository;

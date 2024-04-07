@@ -4,12 +4,15 @@ import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.MainView;
+import com.vaadin.flow.component.HtmlContainer;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -24,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-@Route(value = "", layout = MainView.class)
+@Route(value = "/livro", layout = MainView.class)
 public class BookGrid extends VerticalLayout implements RefreshListener {
     
     private final BookController bookController;
@@ -45,7 +48,7 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
     
     private List<Book> listAllBooks;
     
-    public BookGrid(@Autowired BookController bookController) {
+    public BookGrid(@Autowired BookController bookController) throws IllegalAccessException {
         
         this.bookController = bookController;
         bookFormDialog = new BookForm(bookController, this);
@@ -88,11 +91,12 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
        
         searchField = new TextField("Pesquisa");
         searchField.setWidth("60%");
-        searchField.setValueChangeMode(ValueChangeMode.LAZY);
+        searchField.setPrefixComponent(new Icon(VaadinIcon.SEARCH));
+        searchField.setValueChangeMode(ValueChangeMode.EAGER);
         searchField.addValueChangeListener(event -> {
             if (!searchField.isEmpty()) {
                 List<Book> filteredBooks = listAllBooks.stream()
-                        .filter(book -> book.getTitle().toLowerCase().contains(searchField.getValue().toLowerCase()))
+                        .filter(book -> book.toString().toLowerCase().contains(searchField.getValue().toLowerCase()))
                         .toList();
                 
                 refreshGrid(filteredBooks);
@@ -108,23 +112,26 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
       
         
         grid = new Grid<>();
-        grid.addComponentColumn(book -> {
-            if(book.getImage() != null && book.getImage().length > 1) {
-                StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));
-                Image image = new Image(resource, "Book image");
-                image.setWidth("30px");
-                image.setHeight("45px");
-                
-                return image;
-            }
-            return createEmptyImage();
-        }).setHeader("Capa").setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
         
-        grid.addColumn(Book::getTitle).setHeader("Título").setWidth("20%");
-        grid.addColumn(Book::getAuthor).setHeader("Autor").setWidth("20%");
-        grid.addColumn(Book::getSynopsis).setHeader("Sinopse").setWidth("50%");
+        grid.addColumn(Book::getCode).setHeader("Código").setFlexGrow(0);
+        grid.addComponentColumn(BookGrid::imageRender).setHeader("Capa").setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+        grid.addColumn(Book::getTitle).setHeader("Título").setWidth("15%");
+        grid.addColumn(Book::getAuthor).setHeader("Autor").setWidth("15%");
+        grid.addColumn(Book::getSynopsis).setHeader("Sinopse").setWidth("40%");
 
         refresh();
+    }
+
+    private static HtmlContainer imageRender(Book book) {
+        if(book.getImage() != null && book.getImage().length > 1) {
+            StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));
+            Image image = new Image(resource, "Book image");
+            image.setWidth("30px");
+            image.setHeight("45px");
+
+            return image;
+        }
+        return createEmptyImage();
     }
 
     private static Div createEmptyImage() {

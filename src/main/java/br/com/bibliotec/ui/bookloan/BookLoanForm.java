@@ -1,90 +1,91 @@
-package br.com.bibliotec.ui.book;
+package br.com.bibliotec.ui.bookloan;
 
 import br.com.bibliotec.anotation.Bind;
 import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.controller.BookLoanController;
+import br.com.bibliotec.controller.StudentController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
+import br.com.bibliotec.model.BookLoan;
+import br.com.bibliotec.model.Student;
 import br.com.bibliotec.ui.helper.Binder;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.TextArea;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.Upload;
-import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.time.LocalDate;
 
-public class BookForm extends Dialog {
+public class BookLoanForm extends Dialog {
     
-    @Bind("code")
-    private final TextField txtCode; 
+    @Bind("book")
+    private final ComboBox<Book> bookComboBox;
     
-    @Bind("title")
-    private final TextField txtTitle;
+    @Bind("bookingDate")
+    private final DatePicker bookingDate;
 
-    @Bind("author")
-    private final TextField txtAuthor;
+    @Bind("dueDate")
+    private final DatePicker dueDate;
 
-    @Bind("synopsis")
-    private final TextArea txtsynopsis;
+    @Bind("student")
+    private final ComboBox<Student> studentComboBox;
     
-    private final BookController controller;
-    
+    private final BookLoanController controller;
+
     private final FormLayout formLayout;
 
     private boolean isNew;
-    
+
     private  Button confirmButton;
-    
+
     private Button saveButton;
-    
-    private Book currentBook;
+
+    private BookLoan currentBookLoan;
 
     private Dialog deleteDialog;
 
     private  Button deleteButton;
-    
-    private Upload upload;
 
-    private final Binder<Book> binder;
-    
+
+    private final Binder<BookLoan> binder;
+
     private final RefreshListener refreshListener;
-    
-    public BookForm(@Autowired BookController controller, RefreshListener refreshListener) throws IllegalAccessException {
+
+    public BookLoanForm(BookLoanController controller, BookController bookController, StudentController studentController, RefreshListener refreshListener) throws IllegalAccessException {
         this.refreshListener = refreshListener;
         this.controller = controller;
         this.formLayout = new FormLayout();
         formLayout.setMaxWidth("500px");
-        this.currentBook = new Book();
+        this.currentBookLoan = new BookLoan();
 
-        binder = new Binder<>(Book.class, this);
-        
-        createImageInput();
-        
-        txtCode = new TextField("Código");
-        txtCode.setAllowedCharPattern("[0-9/\\-.]");
+        binder = new Binder<>(BookLoan.class, this);
 
-        txtTitle = new TextField("Título");
-        txtAuthor = new TextField("Autor");
-        txtsynopsis = new TextArea("Sinopse");
+        bookComboBox = new ComboBox<>("Empréstimo");
+        bookComboBox.setItems(bookController.list());
+        
+        bookingDate = new DatePicker("Data do empréstimo");
+        dueDate = new DatePicker("Data do vencimento");
+        
+        bookingDate.setValue(LocalDate.now());
+        bookingDate.addValueChangeListener(event -> dueDate.setMin(event.getValue()));
+
+        studentComboBox = new ComboBox<>("Aluno");
+        studentComboBox.setItems(studentController.list());
         
         binder.createBean();
-
-        createButtons();
         
-        formLayout.add(upload, txtCode, txtTitle, txtAuthor, txtsynopsis);
+        createButtons();
+
+        formLayout.add(bookComboBox, bookingDate, dueDate, studentComboBox);
         createDeleteDialog();
         add(formLayout);
     }
@@ -94,7 +95,7 @@ public class BookForm extends Dialog {
         addOpenedChangeListener(dialog -> {
             if (isNew) {
                 saveButton.setText("Salvar");
-                setHeaderTitle("Novo livro");
+                setHeaderTitle("Novo Empréstimo");
                 displayButtons.remove(deleteButton);
             } else {
                 saveButton.setText("Atualizar");
@@ -107,30 +108,7 @@ public class BookForm extends Dialog {
         displayButtons.add(saveButton);
         getFooter().add(displayButtons);
     }
-
-    private void createImageInput() {
-        MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
-        upload = new Upload(buffer);
-        
-        Span label = new Span("Adicione a imagem do livro aqui.");
-        label.getStyle().set("vertical-align", "bottom");
-        upload.setDropLabel(label);
-        
-        upload.setUploadButton(new Button("Adicionar imagem"));
-        upload.setMaxFiles(1);
-
-        upload.addSucceededListener(event -> {
-            String fileName = event.getFileName();
-            InputStream inputStream = buffer.getInputStream(fileName);
-
-            try {
-                currentBook.setImage(inputStream.readAllBytes());
-            } catch (IOException error) {
-                Notification.show("Erro ao adicionar imagem.").addThemeVariants(NotificationVariant.LUMO_ERROR);
-                error.printStackTrace();
-            }
-        });
-    }
+    
 
     private void createDialogButtons() {
 
@@ -138,7 +116,7 @@ public class BookForm extends Dialog {
         saveButton.addClickListener(click -> {
             try {
                 handleSaveButton();
-            } catch (BibliotecException | ValidationException error) {
+            } catch (ValidationException error) {
                 Notification.show("Erro ao salver item.").addThemeVariants(NotificationVariant.LUMO_ERROR);
                 error.printStackTrace();
             }
@@ -173,7 +151,7 @@ public class BookForm extends Dialog {
 
     private void deleteAndClose() {
         try {
-            controller.delete(currentBook);
+            controller.delete(currentBookLoan);
             deleteDialog.close();
             refreshListener.refresh();
             close();
@@ -183,15 +161,15 @@ public class BookForm extends Dialog {
         }
     }
 
-    public void handleSaveButton() throws BibliotecException, ValidationException {
-        binder.writeBean(currentBook);
+    public void handleSaveButton() throws ValidationException {
+        binder.writeBean(currentBookLoan);
 
         if (binder.isValid()) {
             try {
-                if (currentBook.getId() == null) {
-                    controller.save(currentBook);
+                if (currentBookLoan.getId() == null) {
+                    controller.save(currentBookLoan);
                 } else {
-                    controller.update(currentBook);
+                    controller.update(currentBookLoan);
                 }
 
                 resetBinder();
@@ -209,15 +187,16 @@ public class BookForm extends Dialog {
         setNewBean();
     }
 
-    public void setBinder(Book entity) {
-        this.currentBook = entity;
+    public void setBinder(BookLoan entity) {
+        this.currentBookLoan = entity;
         binder.readBean(entity);
         this.isNew = false;
     }
 
     public void setNewBean() {
-        this.currentBook = new Book();
+        this.currentBookLoan = new BookLoan();
         binder.readBean(null);
         this.isNew = true;
     }
 }
+

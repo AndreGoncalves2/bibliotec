@@ -28,8 +28,14 @@ public class MainView extends AppLayout {
     private SideNav getSideNav() {
         SideNav sideNav = new SideNav();
         sideNav.addItem(
-                new SideNavItem("Livros", "/",
-                        VaadinIcon.BOOK.create()));
+                new SideNavItem("Livro", "/livro",
+                        VaadinIcon.BOOK.create()),
+                new SideNavItem("Empréstimo", "/emprestimo",
+                        VaadinIcon.EXCHANGE.create()),
+                new SideNavItem("Aluno", "/aluno",
+                        VaadinIcon.NURSE.create())
+        );
+        
         return sideNav;
     }
 }

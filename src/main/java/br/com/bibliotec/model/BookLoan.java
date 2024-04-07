@@ -1,7 +1,6 @@
 package br.com.bibliotec.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -16,13 +15,13 @@ public class BookLoan {
     private Long id;
     
     @ManyToOne
-    @NotBlank
+    @NotNull
     @JoinColumn(name = "book")
     private Book book;
     
     @NotNull
-    @Column(name = "reserved")
-    private Boolean reserved;
+    @Column(name = "returned")
+    private Boolean returned;
     
     @NotNull
     @Column(name = "booking_date")
@@ -31,13 +30,10 @@ public class BookLoan {
     @Column(name = "due_date")
     private LocalDate dueDate;   
     
-    @NotBlank
-    @Column(name = "student", length = 60)
-    private String student;
-    
-    @NotBlank
-    @Column(name = "student_class", length = 60)
-    private String studentClass;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "student_ra")
+    private Student student;
 
     public Long getId() {
         return id;
@@ -55,12 +51,12 @@ public class BookLoan {
         this.book = book;
     }
 
-    public Boolean getReserved() {
-        return reserved;
+    public Boolean getReturned() {
+        return returned;
     }
 
-    public void setReserved(Boolean reserved) {
-        this.reserved = reserved;
+    public void setReturned(Boolean reserved) {
+        this.returned = reserved;
     }
 
     public LocalDate getBookingDate() {
@@ -79,19 +75,20 @@ public class BookLoan {
         this.dueDate = dueDate;
     }
 
-    public String getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(String student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
-    public String getStudentClass() {
-        return studentClass;
-    }
-
-    public void setStudentClass(String studentClass) {
-        this.studentClass = studentClass;
+    @Override
+    public String toString() {
+        return "BookLoan{" +
+                "id=" + id +
+                ", book=" + book +
+                ", student=" + student +
+                '}';
     }
 }

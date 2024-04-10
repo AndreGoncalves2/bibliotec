@@ -1,6 +1,7 @@
 package br.com.bibliotec.controller.helper;
 
 
+import br.com.bibliotec.exception.DuplicateRaException;
 import br.com.bibliotec.exeption.BibliotecException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,7 +19,7 @@ public class GenericController<T, I, R extends JpaRepository<T, I>> {
         FIND_ALL
     }
 
-    protected void validate(T entity, Mode mode) throws BibliotecException {}
+    protected void validate(T entity, Mode mode) throws BibliotecException, DuplicateRaException {}
 
     protected void afterExecute(T entity, Mode mode) throws BibliotecException {}
 

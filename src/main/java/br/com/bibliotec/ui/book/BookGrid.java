@@ -1,6 +1,7 @@
 package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.MainView;
@@ -24,7 +25,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Route(value = "/livro", layout = MainView.class)
@@ -75,11 +79,11 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
 
         editButton = new Button("EDIT");
         editButton.addClickListener(click -> {
-            if (grid.getSelectedItems().stream().findFirst().isPresent()) {
-                bookFormDialog.setBinder(grid.getSelectedItems().stream().findFirst().get());
+            try {
+                bookFormDialog.setBinder(getSelectedItem());
                 bookFormDialog.open(); 
-            } else {
-                Notification.show("Selecione um item.").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            } catch (BibliotecException e) {
+                e.printStackTrace();
             }
         });
         
@@ -113,8 +117,8 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
         
         grid = new Grid<>();
         
-        grid.addColumn(Book::getCode).setHeader("Código").setFlexGrow(0);
         grid.addComponentColumn(BookGrid::imageRender).setHeader("Capa").setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+        grid.addColumn(Book::getCode).setHeader("Código").setWidth("5%");
         grid.addColumn(Book::getTitle).setHeader("Título").setWidth("15%");
         grid.addColumn(Book::getAuthor).setHeader("Autor").setWidth("15%");
         grid.addColumn(Book::getSynopsis).setHeader("Sinopse").setWidth("40%");
@@ -123,13 +127,19 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
     }
 
     private static HtmlContainer imageRender(Book book) {
-        if(book.getImage() != null && book.getImage().length > 1) {
-            StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));
-            Image image = new Image(resource, "Book image");
-            image.setWidth("30px");
-            image.setHeight("45px");
-
-            return image;
+        try {
+            BufferedImage imageCheck = ImageIO.read(new ByteArrayInputStream(book.getImage()));
+            
+            if (imageCheck != null) {
+                StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));
+                Image image = new Image(resource, "Book image");
+                image.setWidth("30px");
+                image.setHeight("45px");
+    
+                return image;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return createEmptyImage();
     }
@@ -139,6 +149,14 @@ public class BookGrid extends VerticalLayout implements RefreshListener {
         emptyImage.setWidth("30px");
         emptyImage.setHeight("45px");
         return emptyImage;
+    }
+
+    public Book getSelectedItem() throws BibliotecException {
+        if (grid.getSelectedItems().stream().findFirst().isEmpty()) {
+            Notification.show("Nenhum item selecionado").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            throw new BibliotecException("Nenhum item selecionado");
+        }
+        return grid.getSelectedItems().stream().findFirst().get();
     }
     
     protected void refreshGrid(List<Book> listBooks) {

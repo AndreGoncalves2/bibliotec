@@ -1,6 +1,7 @@
 package br.com.bibliotec.ui.student;
 
 import br.com.bibliotec.controller.StudentController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Student;
 import br.com.bibliotec.ui.MainView;
@@ -69,11 +70,11 @@ public class StudentGrid extends VerticalLayout implements RefreshListener {
 
         editButton = new Button("EDIT");
         editButton.addClickListener(click -> {
-            if (grid.getSelectedItems().stream().findFirst().isPresent()) {
-                studentFormDialog.setBinder(grid.getSelectedItems().stream().findFirst().get());
+            try {
+                studentFormDialog.setBinder(getSelectedItem());
                 studentFormDialog.open();
-            } else {
-                Notification.show("Selecione um item.").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            } catch (BibliotecException e) {
+                e.printStackTrace();
             }
         });
 
@@ -104,14 +105,21 @@ public class StudentGrid extends VerticalLayout implements RefreshListener {
 
     private void creatGrid() {
 
-
         grid = new Grid<>();
 
-        grid.addColumn(Student::getRa).setHeader("RA").setFlexGrow(0);
-        grid.addColumn(Student::getName).setHeader("Nome").setFlexGrow(1);
-        grid.addColumn(Student::getStudentClass).setHeader("Classe").setFlexGrow(1);
+        grid.addColumn(Student::getRa).setHeader("RA").setFlexGrow(1);
+        grid.addColumn(Student::getName).setHeader("Nome").setFlexGrow(4);
+        grid.addColumn(Student::getStudentClass).setHeader("Classe").setFlexGrow(4);
 
         refresh();
+    }
+
+    public Student getSelectedItem() throws BibliotecException {
+        if (grid.getSelectedItems().stream().findFirst().isEmpty()) {
+            Notification.show("Nenhum item selecionado").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            throw new BibliotecException("Nenhum item selecionado");
+        }
+        return grid.getSelectedItems().stream().findFirst().get();
     }
 
     protected void refreshGrid(List<Student> listBooks) {

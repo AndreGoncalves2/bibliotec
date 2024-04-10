@@ -3,9 +3,11 @@ package br.com.bibliotec.ui.bookloan;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.ui.MainView;
+import br.com.bibliotec.ui.componets.ReturnBookDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
@@ -21,6 +23,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Route(value = "/emprestimo", layout = MainView.class)
@@ -32,6 +35,8 @@ public class BookLoanGrid extends VerticalLayout implements RefreshListener {
     private Button addButton;
 
     private Button editButton;
+    
+    private Button returnButton;
 
     private final H1 title;
 
@@ -42,10 +47,12 @@ public class BookLoanGrid extends VerticalLayout implements RefreshListener {
     private final BookLoanForm bookLoanFormDialog;
 
     private List<BookLoan> listAllBookLoan;
+    
+    private ReturnBookDialog returnBookDialog;
 
     public BookLoanGrid(@Autowired BookLoanController bookLoanController,
                         @Autowired BookController bookController,
-                        @Autowired StudentController studentController) throws IllegalAccessException {
+                        @Autowired StudentController studentController) throws IllegalAccessException, BibliotecException {
 
         this.bookLoanController = bookLoanController;
         bookLoanFormDialog = new BookLoanForm(bookLoanController, bookController, studentController, this);
@@ -72,15 +79,27 @@ public class BookLoanGrid extends VerticalLayout implements RefreshListener {
 
         editButton = new Button("EDIT");
         editButton.addClickListener(click -> {
-            if (grid.getSelectedItems().stream().findFirst().isPresent()) {
-                bookLoanFormDialog.setBinder(grid.getSelectedItems().stream().findFirst().get());
+            try {
+                bookLoanFormDialog.setBinder(getSelectedItem());
                 bookLoanFormDialog.open();
-            } else {
-                Notification.show("Selecione um item.").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            } catch (BibliotecException e) {
+                e.printStackTrace();
             }
         });
 
-        actionButtons.add(addButton, editButton);
+        returnButton = new Button("Devolver");
+        returnButton.addClickListener(click -> {
+            try {
+                returnBookDialog = new ReturnBookDialog(getSelectedItem(), bookLoanController, this);
+            } catch (BibliotecException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        
+        
+        
+
+        actionButtons.add(addButton, editButton,returnButton);
         return actionButtons;
     }
 
@@ -106,22 +125,29 @@ public class BookLoanGrid extends VerticalLayout implements RefreshListener {
     }
 
     private void creatGrid() {
-
-
         grid = new Grid<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         
-        grid.addColumn(bookLoan -> bookLoan.getBook().getTitle()).setFlexGrow(1);
-        grid.addColumn(BookLoan::getStudent).setHeader("Aluno").setFlexGrow(1);
-//        grid.addColumn(BookLoan::getStudentClass).setHeader("Turma").setFlexGrow(1);
-        grid.addColumn(BookLoan::getBookingDate).setHeader("Data Reserva").setWidth("20%");
-        grid.addColumn(BookLoan::getDueDate).setHeader("Data Vencimento").setWidth("20%");
-        grid.addColumn(BookLoan::getReturned).setHeader("Retornado").setWidth("20%");
+        grid.addColumn(bookLoan -> bookLoan.getBook().getTitle()).setHeader("Título").setFlexGrow(3);
+        grid.addColumn(bookLoan -> bookLoan.getStudent().getName()).setHeader("Aluno").setFlexGrow(3);
+        grid.addColumn(bookLoan -> bookLoan.getStudent().getStudentClass()).setHeader("Turma").setFlexGrow(1);
+        grid.addColumn(bookLoan -> formatter.format(bookLoan.getBookingDate())).setHeader("Data Reserva").setFlexGrow(1);
+        grid.addColumn(bookLoan -> formatter.format(bookLoan.getDueDate())).setHeader("Data Vencimento").setFlexGrow(1);
+        grid.addColumn(BookLoan::getReturned).setHeader("Retornado").setFlexGrow(0);
         
         refresh();
     }
 
     protected void refreshGrid(List<BookLoan> listBookLoan) {
         grid.setDataProvider(DataProvider.ofCollection(listBookLoan));
+    }
+    
+    public BookLoan getSelectedItem() throws BibliotecException {
+        if (grid.getSelectedItems().stream().findFirst().isEmpty()) {
+            Notification.show("Nenhum item selecionado").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            throw new BibliotecException("Nenhum item selecionado");
+        }
+        return grid.getSelectedItems().stream().findFirst().get();
     }
 
     @Override

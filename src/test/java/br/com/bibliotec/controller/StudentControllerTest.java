@@ -1,8 +1,10 @@
 package br.com.bibliotec.controller;
 
 import br.com.bibliotec.builder.StudentBuilder;
+import br.com.bibliotec.exception.DuplicateRaException;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.Student;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 public class StudentControllerTest {
     private Student studentExample;
 
@@ -39,7 +42,7 @@ public class StudentControllerTest {
     @Order(3)
     void testLoad() throws BibliotecException {
         Student testLoad = controller.save(studentExample);
-        assertNotNull(controller.load(testLoad.getRa()));
+        assertNotNull(controller.load(testLoad.getId()));
     }
 
     @Test
@@ -48,7 +51,7 @@ public class StudentControllerTest {
         Student testUpdate = controller.save(studentExample);
         String oldDescription = studentExample.getName();
         testUpdate.setName("name Update");
-        testUpdate = controller.save(testUpdate);
+        testUpdate = controller.update(testUpdate);
 
         assertNotEquals(oldDescription, testUpdate.getName());
     }
@@ -59,6 +62,16 @@ public class StudentControllerTest {
         Student testDelete = controller.save(studentExample);
         controller.delete(testDelete);
 
-        assertThrows(BibliotecException.class, () -> controller.load(testDelete.getRa()));
+        assertThrows(BibliotecException.class, () -> controller.load(testDelete.getId()));
+    }
+    
+    @Test
+    @Order(6)
+    void testDuplicateRa() throws BibliotecException {
+        Student student = StudentBuilder.build().now();
+        student.setRa(studentExample.getRa());
+        
+        controller.save(studentExample);
+        assertThrows(DuplicateRaException.class, () -> controller.save(student));
     }
 }

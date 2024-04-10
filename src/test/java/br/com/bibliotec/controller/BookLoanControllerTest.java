@@ -7,6 +7,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -21,10 +23,13 @@ public class BookLoanControllerTest {
     
     @Autowired
     private BookController bookController;
+    
+    @Autowired
+    private StudentController studentController;
 
     @BeforeAll
     void buildBean() throws BibliotecException {
-        bookLoanExample = BookLoanBuilder.build().addBook(bookController).now();
+        bookLoanExample = BookLoanBuilder.build().addBook(bookController).addStudent(studentController).now();
     }
 
     @Test
@@ -50,11 +55,11 @@ public class BookLoanControllerTest {
     @Order(4)
     void testUpdate() throws BibliotecException {
         BookLoan testUpdate = controller.save(bookLoanExample);
-        Boolean oldDescription = bookLoanExample.getReturned();
-        testUpdate.setReturned(true);
-        testUpdate = controller.save(testUpdate);
+        LocalDate oldDate = bookLoanExample.getBookingDate();
+        testUpdate.setBookingDate(LocalDate.now().plusMonths(2));
+        testUpdate = controller.update(testUpdate);
 
-        assertNotEquals(oldDescription, testUpdate.getReturned());
+        assertNotEquals(oldDate, testUpdate.getBookingDate());
     }
 
     @Test
@@ -64,5 +69,20 @@ public class BookLoanControllerTest {
         controller.delete(testDelete);
         
         assertThrows(BibliotecException.class, () -> controller.load(testDelete.getId()));
+    }
+    
+    @Test
+    @Order(6)
+    void testSetReturned() throws BibliotecException {
+        String bookCode = "1234567";
+        
+        bookLoanExample.getBook().setCode(bookCode);
+        bookLoanExample.setReturned(false);
+        
+        controller.save(bookLoanExample);
+        controller.setReturned(bookLoanExample, bookCode);
+        BookLoan bookLoanBookReturned = controller.load(bookLoanExample.getId());
+        
+        assertEquals(bookLoanBookReturned.getReturned(), true);
     }
 }

@@ -2,6 +2,8 @@ package br.com.bibliotec.builder;
 
 import br.com.bibliotec.model.Student;
 
+import java.util.Random;
+
 public class StudentBuilder {
     
     private Student student;
@@ -10,8 +12,8 @@ public class StudentBuilder {
         StudentBuilder builder = new StudentBuilder();
         builder.student = new Student();
         
-        builder.student.setRa(1234567);
-        builder.student.setName("nomeTest");
+        builder.student.setRa(String.valueOf((new Random().nextInt(100001))));
+        builder.student.setName("nomeTesteee");
         builder.student.setStudentClass("Classe teste");
         
         return builder;

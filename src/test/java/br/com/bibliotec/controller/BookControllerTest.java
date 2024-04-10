@@ -40,7 +40,7 @@ public class BookControllerTest {
     @Order(3)
     void testLoad() throws BibliotecException {
         Book testLoad = controller.save(bookExample);
-        assertNotNull(controller.load(testLoad.getCode()));
+        assertNotNull(controller.load(testLoad.getId()));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class BookControllerTest {
         Book testUpdate = controller.save(bookExample);
         String oldDescription = bookExample.getTitle();
         testUpdate.setTitle("title Update");
-        testUpdate = controller.save(testUpdate);
+        testUpdate = controller.update(testUpdate);
 
         assertNotEquals(oldDescription, testUpdate.getTitle());
     }
@@ -60,6 +60,6 @@ public class BookControllerTest {
         Book testDelete = controller.save(bookExample);
         controller.delete(testDelete);
 
-        assertThrows(BibliotecException.class, () -> controller.load(testDelete.getCode()));
+        assertThrows(BibliotecException.class, () -> controller.load(testDelete.getId()));
     }
 }

@@ -3,6 +3,7 @@ package br.com.bibliotec.ui.book;
 import br.com.bibliotec.anotation.Bind;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.listener.FormDefinition;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.helper.Binder;
@@ -26,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class BookForm extends Dialog {
+public class BookForm extends Dialog implements FormDefinition {
     
     @Bind("code")
     private final TextField txtCode; 
@@ -209,15 +210,22 @@ public class BookForm extends Dialog {
         setNewBean();
     }
 
-    public void setBinder(Book entity) {
-        this.currentBook = entity;
-        binder.readBean(entity);
-        this.isNew = false;
-    }
+//    public void setBinder(Book entity) {
+//        this.currentBook = entity;
+//        binder.readBean(entity);
+//        this.isNew = false;
+//    }
 
     public void setNewBean() {
         this.currentBook = new Book();
         binder.readBean(null);
         this.isNew = true;
+    }
+
+    @Override
+    public <T> void setBinder(T entity) {
+        this.currentBook = (Book) entity;
+        binder.readBean((Book) entity);
+        this.isNew = false;
     }
 }

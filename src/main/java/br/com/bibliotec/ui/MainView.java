@@ -5,6 +5,7 @@ import br.com.bibliotec.ui.bookloan.BookLoanGrid;
 import br.com.bibliotec.ui.student.StudentGrid;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -35,10 +36,10 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         
         HorizontalLayout layoutButtons = createHeader();
         
+        HorizontalLayout pageTitle = createPageTitle();
         
-        container.add(tileContainer, layoutButtons);
+        container.add(tileContainer, layoutButtons, pageTitle);
         addToNavbar(container);
-        
     }
     
     private HorizontalLayout createHeader() {
@@ -78,6 +79,20 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         endDiv.add(configDiv);
         
         layout.add(startDiv, endDiv);
+        return layout;
+    }
+    
+    private HorizontalLayout createPageTitle() {
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.addClassName("school-name-container");
+        
+        H1 start = new H1("BIBLIOTECA DIGITAL DA");
+        start.addClassName("title-start");
+        
+        H1 end = new H1("ESCOLA MUNICIPAL JAGS");
+        end.addClassName("title-end");
+        
+        layout.add(start, end);
         return layout;
     }
 

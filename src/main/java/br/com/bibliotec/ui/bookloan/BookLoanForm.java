@@ -5,6 +5,7 @@ import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
 import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.listener.FormDefinition;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.BookLoan;
@@ -25,7 +26,7 @@ import com.vaadin.flow.data.binder.ValidationException;
 
 import java.time.LocalDate;
 
-public class BookLoanForm extends Dialog {
+public class BookLoanForm extends Dialog implements FormDefinition {
     
     @Bind("book")
     private final ComboBox<Book> bookComboBox;
@@ -187,16 +188,17 @@ public class BookLoanForm extends Dialog {
         setNewBean();
     }
 
-    public void setBinder(BookLoan entity) {
-        this.currentBookLoan = entity;
-        binder.readBean(entity);
-        this.isNew = false;
-    }
-
     public void setNewBean() {
         this.currentBookLoan = new BookLoan();
         binder.readBean(null);
         this.isNew = true;
+    }
+
+    @Override
+    public <T> void setBinder(T entity) {
+        this.currentBookLoan = (BookLoan) entity;
+        binder.readBean((BookLoan) entity);
+        this.isNew = false;
     }
 }
 

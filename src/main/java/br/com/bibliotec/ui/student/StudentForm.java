@@ -3,6 +3,7 @@ package br.com.bibliotec.ui.student;
 import br.com.bibliotec.anotation.Bind;
 import br.com.bibliotec.controller.StudentController;
 import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.listener.FormDefinition;
 import br.com.bibliotec.listener.RefreshListener;
 import br.com.bibliotec.model.Student;
 import br.com.bibliotec.ui.helper.Binder;
@@ -18,7 +19,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.ValidationException;
 
-public class StudentForm extends Dialog {
+public class StudentForm extends Dialog implements FormDefinition {
     
     @Bind("ra")
     public TextField txtRa;
@@ -179,15 +180,16 @@ public class StudentForm extends Dialog {
         setNewBean();
     }
 
-    public void setBinder(Student entity) {
-        this.currentStudent = entity;
-        binder.readBean(entity);
-        this.isNew = false;
-    }
-
     public void setNewBean() {
         this.currentStudent = new Student();
         binder.readBean(null);
         this.isNew = true;
+    }
+
+    @Override
+    public <T> void setBinder(T entity) {
+        this.currentStudent = (Student) entity;
+        binder.readBean((Student) entity);
+        this.isNew = false;
     }
 }

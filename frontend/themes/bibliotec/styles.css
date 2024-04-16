@@ -1,79 +1,30 @@
+@import "../../../src/main/resources/META-INF/resources/components/header.css";
+@import "../../../src/main/resources/META-INF/resources/components/grid.css";
+
 :root {
+    --lumo-tint-10pct: rgba(0, 0, 0, 0.1);
+    --lumo-body-text-color: black;
+    --vaadin-grid-cell-background: white;
+    --lumo-base-color: white;
     --blue-color: rgba(83, 90, 255, 0.56);
     --black-color: #262626;
     --background-color: #E0F0FF;
     
     --text-black-color: #1A1A1A;
+    --text-blue-color: #43499F;
     
-    
+    --vaadin-input-field-placeholder-color: rgba(0, 0, 0, 0.3);
 }
 
 body {
     background-color: var(--background-color);
 }
-
-.header-container {
-    background-color: var(--background-color);
+vaadin-grid {
+    border: 1px solid var(--text-black-color) ;
 }
 
-.div-links-container-end {
-    gap: 0;
-    justify-content: space-between;
+vaadin-grid::part(header-cell) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-.buttons-container {
-    border-radius: 15px;
-    justify-content: space-between;
-    width: 100%;
-    
-    border-block: 1px solid var(--black-color);
-    background-color: white;
-}
-
-.title-container {
-    width: 100%;
-    padding-block: 1rem;
-    border-radius: .5rem;
-
-    border: 1px solid var(--black-color);
-    background-color: var(--blue-color);
-}
-
-.header-container h4 {
-    color: var(--text-black-color);
-    text-align: center;
-    width: 100%;
-    text-shadow: 1px 4px 4px rgba(0,0,0,0.3);
-}
-
-.div-links-start {
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
-}
-
-.div-links-start a, 
-.div-links-right a,
-.div-link-config a {
-    font-weight: bold;
-    text-decoration: none;
-    color: var(--black-color);
-}
-
-.div-links-right,
-.div-links-start,
-.div-link-config {
-    padding: 1.2rem 4rem;
-    border-left: 1px solid var(--black-color);
-    /*background-color: var(--blue-color);*/
-}
-
-.div-link-config {
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
-    border-right: 1px solid var(--black-color);
-}
-
-.div-links-start {
-    border-right: 1px solid var(--black-color);
-}
 

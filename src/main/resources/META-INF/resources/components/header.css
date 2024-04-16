@@ -1,0 +1,94 @@
+.header-container {
+    align-items: center;
+    background-color: var(--background-color);
+}
+
+.div-links-container-end {
+    gap: 0;
+    justify-content: space-between;
+}
+
+.buttons-container {
+    border-radius: 15px;
+    justify-content: space-between;
+    width: 100%;
+
+    border-block: 1px solid var(--black-color);
+    background-color: white;
+}
+
+.title-container {
+    width: 100%;
+    padding-block: .5rem;
+    border-radius: .25rem;
+
+    border: 1px solid var(--black-color);
+    background-color: var(--blue-color);
+}
+
+.header-container h4 {
+    font-size: 1rem;
+    color: var(--text-black-color);
+    text-align: center;
+    width: 100%;
+    text-shadow: 1px 4px 4px rgba(0,0,0,0.3);
+}
+
+.div-links-start {
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.div-links-start a,
+.div-links-right a,
+.div-link-config a {
+    font-size: .9rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--black-color);
+}
+
+.div-links-right,
+.div-links-start,
+.div-link-config {
+    padding: .6rem 2rem;
+    border-left: 1px solid var(--black-color);
+}
+
+.div-link-config {
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    border-right: 1px solid var(--black-color);
+}
+
+.div-links-start {
+    border-right: 1px solid var(--black-color);
+}
+
+.school-name-container {
+    position: relative;
+}
+
+.school-name-container::after {
+    content: "";
+    position: absolute;
+    bottom: -.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 1px;
+    background-color: var(--black-color);
+}
+
+.title-start {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    color: var(--text-black-color);
+}
+
+.title-end {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    color: var(--text-blue-color);
+}
+

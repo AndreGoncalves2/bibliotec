@@ -61,10 +61,7 @@ public class GenericGrid<T, C extends GenericController<T,?,?>> extends Vertical
         
         Button addButton = new Button("ADICIONAR");
         addButton.setClassName("button-form");
-        addButton.addClickListener(click -> {
-            currentForm.setNewBean();
-            currentForm.open();
-        });
+        addButton.addClickListener(click -> currentForm.open());
 
         editButton = new Button("EDITAR");
         editButton.addClassName("button-form");

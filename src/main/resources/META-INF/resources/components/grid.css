@@ -16,3 +16,12 @@ vaadin-text-field::part(input-field){
 vaadin-text-field vaadin-icon {
     color: var(--text-black-color);
 }
+
+vaadin-grid {
+    border: 1px solid var(--text-black-color);
+    box-shadow: 4px 4px 3px 1px var(--box-shadown);
+}
+
+vaadin-grid::part(header-cell) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}

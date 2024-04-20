@@ -24,6 +24,7 @@ import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.binder.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -63,7 +64,7 @@ public class BookForm extends Dialog implements FormDefinition {
     
     private final RefreshListener refreshListener;
     
-    public BookForm(@Autowired BookController controller, RefreshListener refreshListener) throws IllegalAccessException {
+    public BookForm(@Autowired BookController controller, @Nullable RefreshListener refreshListener) throws IllegalAccessException {
         this.refreshListener = refreshListener;
         this.controller = controller;
         this.formLayout = new FormLayout();
@@ -87,6 +88,7 @@ public class BookForm extends Dialog implements FormDefinition {
         
         formLayout.add(upload, txtCode, txtTitle, txtAuthor, txtsynopsis);
         createDeleteDialog();
+        setNewBean();
         add(formLayout);
     }
 
@@ -176,7 +178,9 @@ public class BookForm extends Dialog implements FormDefinition {
         try {
             controller.delete(currentBook);
             deleteDialog.close();
-            refreshListener.refresh();
+            if (refreshListener != null) {
+                refreshListener.refresh();
+            }
             close();
         } catch (BibliotecException error){
             Notification.show("Erro ao deletar item.");
@@ -196,7 +200,9 @@ public class BookForm extends Dialog implements FormDefinition {
                 }
 
                 resetBinder();
-                refreshListener.refresh();
+                if (refreshListener != null) {
+                    refreshListener.refresh();
+                }
                 close();
             } catch (BibliotecException e) {
                 Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_WARNING);

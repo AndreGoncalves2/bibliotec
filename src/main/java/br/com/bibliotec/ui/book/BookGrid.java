@@ -43,7 +43,10 @@ public class BookGrid extends GenericGrid<Book, BookController> {
 
     private static HtmlContainer imageRender(Book book) {
         try {
-            BufferedImage imageCheck = ImageIO.read(new ByteArrayInputStream(book.getImage()));
+            BufferedImage imageCheck = null;
+            if (book.getImage() != null) {
+                imageCheck = ImageIO.read(new ByteArrayInputStream(book.getImage()));
+            }
 
             if (imageCheck != null) {
                 StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));

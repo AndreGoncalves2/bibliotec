@@ -145,7 +145,9 @@ public class StudentForm extends Dialog implements FormDefinition {
         try {
             controller.delete(currentStudent);
             deleteDialog.close();
-            refreshListener.refresh();
+            if(refreshListener != null) {
+                refreshListener.refresh();
+            }
             close();
         } catch (BibliotecException error){
             Notification.show("Erro ao deletar item.");
@@ -166,7 +168,9 @@ public class StudentForm extends Dialog implements FormDefinition {
                 }
                 
                 resetBinder();
-                refreshListener.refresh();
+                if(refreshListener != null) {
+                    refreshListener.refresh();
+                }
                 close();
             } catch (BibliotecException e) {
                 Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_WARNING);

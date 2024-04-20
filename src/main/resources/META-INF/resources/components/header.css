@@ -46,12 +46,13 @@
     font-weight: bold;
     text-decoration: none;
     color: var(--black-color);
+    padding: .6rem 3rem;
 }
 
 .div-links-right,
 .div-links-start,
 .div-link-config {
-    padding: .6rem 2rem;
+    padding-block: .6rem;
     border-left: 1px solid var(--black-color);
 }
 
@@ -81,13 +82,13 @@
 }
 
 .title-start {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     margin-top: 1rem;
     color: var(--text-black-color);
 }
 
 .title-end {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     margin-top: 1rem;
     color: var(--text-blue-color);
 }

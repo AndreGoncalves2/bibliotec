@@ -83,7 +83,8 @@ public class BookLoanForm extends Dialog implements FormDefinition {
         studentComboBox.setItems(studentController.list());
         
         binder.createBean();
-        
+        setNewBean();
+
         createButtons();
 
         formLayout.add(bookComboBox, bookingDate, dueDate, studentComboBox);
@@ -100,7 +101,7 @@ public class BookLoanForm extends Dialog implements FormDefinition {
                 displayButtons.remove(deleteButton);
             } else {
                 saveButton.setText("Atualizar");
-                setHeaderTitle("Editar livro");
+                setHeaderTitle("Editar Empréstimo");
                 displayButtons.add(deleteButton);
             }
         });
@@ -154,7 +155,9 @@ public class BookLoanForm extends Dialog implements FormDefinition {
         try {
             controller.delete(currentBookLoan);
             deleteDialog.close();
-            refreshListener.refresh();
+            if(refreshListener != null) {
+                refreshListener.refresh();
+            }
             close();
         } catch (BibliotecException error){
             Notification.show("Erro ao deletar item.");
@@ -174,7 +177,9 @@ public class BookLoanForm extends Dialog implements FormDefinition {
                 }
 
                 resetBinder();
-                refreshListener.refresh();
+                if(refreshListener != null) {
+                    refreshListener.refresh();
+                }
                 close();
             } catch (BibliotecException e) {
                 Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_WARNING);

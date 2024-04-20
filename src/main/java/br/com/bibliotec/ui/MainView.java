@@ -2,6 +2,7 @@ package br.com.bibliotec.ui;
 
 import br.com.bibliotec.ui.book.BookGrid;
 import br.com.bibliotec.ui.bookloan.BookLoanGrid;
+import br.com.bibliotec.ui.home.HomePage;
 import br.com.bibliotec.ui.student.StudentGrid;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Div;
@@ -30,13 +31,14 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         container.setClassName("header-container");
         
         HorizontalLayout tileContainer = new HorizontalLayout();
-        tileContainer.setClassName("title-container");
-        H4 title = new H4("BIBLIOTECA ESCOLA MUNICIPAL JOSÉ AUGUSTO GAMA DE SOUZA");
-        tileContainer.add(title);
-        
         HorizontalLayout layoutButtons = createHeader();
-        
         HorizontalLayout pageTitle = createPageTitle();
+        
+        tileContainer.setClassName("title-container");
+        
+        H4 title = new H4("BIBLIOTECA ESCOLA MUNICIPAL JOSÉ AUGUSTO GAMA DE SOUZA");
+        
+        tileContainer.add(title);
         
         container.add(tileContainer, layoutButtons, pageTitle);
         addToNavbar(container);
@@ -45,40 +47,41 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
     private HorizontalLayout createHeader() {
         HorizontalLayout layout = new HorizontalLayout();
         layout.addClassName("buttons-container");
-
+        
         startDiv = new Div();
+        bookDiv = new Div();
+        studentDiv = new Div();
+        loanDiv = new Div();
+        configDiv = new Div();
+
         startDiv.setClassName("div-links-start");
-        RouterLink startLink = new RouterLink("INÍCIO", BookLoanGrid.class);
+        bookDiv.setClassName("div-links-right");
+        studentDiv.setClassName("div-links-right");
+        loanDiv.setClassName("div-links-right");
+        configDiv.setClassName("div-link-config");
+        
+        RouterLink startLink = new RouterLink("INÍCIO", HomePage.class);
+        RouterLink bookLink = new RouterLink("LIVROS", BookGrid.class);
+        RouterLink studentLink = new RouterLink("ALUNOS", StudentGrid.class);
+        RouterLink loanLink = new RouterLink("EMPRÉSTIMOS", BookLoanGrid.class);
+        RouterLink configLink = new RouterLink("CONFIGURAÇÕES", BookLoanGrid.class);
+        
         startDiv.add(startLink);
+        bookDiv.add(bookLink);
+        studentDiv.add(studentLink);
+        loanDiv.add(loanLink);
+        configDiv.add(configLink);
         
         HorizontalLayout endDiv = new HorizontalLayout();
         endDiv.setClassName("div-links-container-end");
 
-        bookDiv = new Div();
-        bookDiv.setClassName("div-links-right");
-        RouterLink bookLink = new RouterLink("LIVROS", BookGrid.class);
-        bookDiv.add(bookLink);
         endDiv.add(bookDiv);
-
-        studentDiv = new Div();
-        studentDiv.setClassName("div-links-right");
-        RouterLink studentLink = new RouterLink("ALUNOS", StudentGrid.class);
-        studentDiv.add(studentLink);
         endDiv.add(studentDiv);
-
-        loanDiv = new Div();
-        loanDiv.setClassName("div-links-right");
-        RouterLink loanLink = new RouterLink("EMPRÉSTIMOS", BookLoanGrid.class);
-        loanDiv.add(loanLink);
         endDiv.add(loanDiv);
-
-        configDiv = new Div();
-        configDiv.setClassName("div-link-config");
-        RouterLink configLink = new RouterLink("CONFIGURAÇÕES", BookLoanGrid.class);
-        configDiv.add(configLink);
         endDiv.add(configDiv);
-        
+
         layout.add(startDiv, endDiv);
+        
         return layout;
     }
     
@@ -87,9 +90,9 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         layout.addClassName("school-name-container");
         
         H1 start = new H1("BIBLIOTECA DIGITAL DA");
-        start.addClassName("title-start");
-        
         H1 end = new H1("ESCOLA MUNICIPAL JAGS");
+        
+        start.addClassName("title-start");
         end.addClassName("title-end");
         
         layout.add(start, end);
@@ -103,11 +106,13 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         bookDiv.getStyle().remove("background-color");
         studentDiv.getStyle().remove("background-color");
         loanDiv.getStyle().remove("background-color");
+        startDiv.getStyle().remove("background-color");
         
         switch (route) {
             case "livro" -> bookDiv.getStyle().set("background-color", "var(--blue-color)");
             case "aluno" -> studentDiv.getStyle().set("background-color", "var(--blue-color)");
             case "emprestimo" -> loanDiv.getStyle().set("background-color", "var(--blue-color)");
+            case "" -> startDiv.getStyle().set("background-color", "var(--blue-color)");
         }
     }
 }

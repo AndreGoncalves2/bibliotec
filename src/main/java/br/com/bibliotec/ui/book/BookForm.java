@@ -216,12 +216,6 @@ public class BookForm extends Dialog implements FormDefinition {
         setNewBean();
     }
 
-//    public void setBinder(Book entity) {
-//        this.currentBook = entity;
-//        binder.readBean(entity);
-//        this.isNew = false;
-//    }
-
     public void setNewBean() {
         this.currentBook = new Book();
         binder.readBean(null);

@@ -71,6 +71,7 @@ public class BookLoanForm extends Dialog implements FormDefinition {
         binder = new Binder<>(BookLoan.class, this);
 
         bookComboBox = new ComboBox<>("Empréstimo");
+        bookComboBox.setItemLabelGenerator(Book::getTitle);
         bookComboBox.setItems(bookController.list());
         
         bookingDate = new DatePicker("Data do empréstimo");
@@ -80,6 +81,7 @@ public class BookLoanForm extends Dialog implements FormDefinition {
         bookingDate.addValueChangeListener(event -> dueDate.setMin(event.getValue()));
 
         studentComboBox = new ComboBox<>("Aluno");
+        studentComboBox.setItemLabelGenerator(student -> student.getName() + " " + student.getStudentClass());
         studentComboBox.setItems(studentController.list());
         
         binder.createBean();

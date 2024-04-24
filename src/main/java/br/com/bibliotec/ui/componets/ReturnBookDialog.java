@@ -13,9 +13,7 @@ import com.vaadin.flow.component.textfield.TextField;
 public class ReturnBookDialog extends Dialog {
     
     private final TextField txtBookCode;
-    
     private final Button confirmButton;
-    
     private final Button cancelButton;
     
     public ReturnBookDialog(BookLoan bookLoan, BookLoanController bookLoanController, RefreshListener refreshListener) {

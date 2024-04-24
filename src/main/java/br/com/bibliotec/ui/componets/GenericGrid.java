@@ -26,7 +26,7 @@ public class GenericGrid<T, C extends GenericController<T,?,?>> extends Vertical
 
     private FormDefinition currentForm;
     
-    private HorizontalLayout actionButtons;
+    public HorizontalLayout actionButtons;
 
     private Button editButton;
 

@@ -70,7 +70,7 @@ public class BookLoanForm extends Dialog implements FormDefinition {
 
         binder = new Binder<>(BookLoan.class, this);
 
-        bookComboBox = new ComboBox<>("Empréstimo");
+        bookComboBox = new ComboBox<>("Livro");
         bookComboBox.setItemLabelGenerator(Book::getTitle);
         bookComboBox.setItems(bookController.list());
         

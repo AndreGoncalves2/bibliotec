@@ -11,6 +11,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+@PermitAll
 @Route(value = "/livro", layout = MainView.class)
 public class BookGrid extends GenericGrid<Book, BookController> {
 
@@ -33,8 +35,8 @@ public class BookGrid extends GenericGrid<Book, BookController> {
         Grid<Book> grid = getGrid();
 
         grid.addComponentColumn(BookGrid::imageRender).setHeader("Capa").setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
-        grid.addColumn(Book::getCode).setHeader("Código").setWidth("5%");
-        grid.addColumn(Book::getTitle).setHeader("Título").setWidth("15%");
+        grid.addColumn(Book::getCode).setHeader("Código").setWidth("5%").setSortable(true);
+        grid.addColumn(Book::getTitle).setHeader("Título").setWidth("15%").setSortable(true);
         grid.addColumn(Book::getAuthor).setHeader("Autor").setWidth("15%");
         grid.addColumn(Book::getSynopsis).setHeader("Sinopse").setWidth("40%");
 

@@ -1,6 +1,8 @@
 @import "../../../src/main/resources/META-INF/resources/components/header.css";
 @import "../../../src/main/resources/META-INF/resources/components/grid.css";
 @import "../../../src/main/resources/META-INF/resources/components/homePage.css";
+@import "../../../src/main/resources/META-INF/resources/components/login.css";
+
 :root {
     --lumo-tint-10pct: rgba(0, 0, 0, 0.1);
     --lumo-body-text-color: black;
@@ -22,7 +24,8 @@ body {
     background-color: var(--background-color);
 }
 
-/*removerrrrr homepage*/
+/*// login apagaaaaaaaaar*/
+
 
 
 

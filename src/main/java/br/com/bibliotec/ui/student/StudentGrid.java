@@ -13,12 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = "/aluno", layout = MainView.class)
 public class StudentGrid extends GenericGrid<Student, StudentController> {
 
-    public StudentGrid(@Autowired StudentController studentController) throws IllegalAccessException {
+    public StudentGrid(@Autowired StudentController studentController) {
         super("ALUNOS", studentController);
         creatGrid();
 
-        StudentForm studentFormDialog = new StudentForm(studentController, this);
-        setForm(studentFormDialog);
     }
 
     private void creatGrid() {

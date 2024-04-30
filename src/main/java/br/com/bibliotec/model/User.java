@@ -1,5 +1,6 @@
 package br.com.bibliotec.model;
 
+import br.com.bibliotec.interfaces.HasId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +8,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements HasId<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

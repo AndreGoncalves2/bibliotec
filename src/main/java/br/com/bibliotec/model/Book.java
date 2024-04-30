@@ -1,5 +1,6 @@
 package br.com.bibliotec.model;
 
+import br.com.bibliotec.interfaces.HasId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Table
 @Entity(name = "book")
-public class Book {
+public class Book implements HasId<Long> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

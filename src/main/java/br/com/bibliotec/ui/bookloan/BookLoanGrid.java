@@ -1,15 +1,14 @@
 package br.com.bibliotec.ui.bookloan;
 
-import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
-import br.com.bibliotec.controller.StudentController;
-import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.GenericGrid;
 import br.com.bibliotec.ui.componets.ReturnBookDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,7 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
     private final BookLoanController bookLoanController;
     
 
-    public BookLoanGrid(@Autowired BookLoanController bookLoanController,
-                        @Autowired BookController bookController,
-                        @Autowired StudentController studentController) throws IllegalAccessException, BibliotecException {
+    public BookLoanGrid(@Autowired BookLoanController bookLoanController) {
         super("EMPRÉSTIMOS", bookLoanController);
         
         this.bookLoanController = bookLoanController;
@@ -38,15 +35,12 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         retunButton.addClassName("button-form");
         retunButton.addClickListener(click -> clickReturnBook());
         creatGrid();
-
-        BookLoanForm bookLoanFormDialog = new BookLoanForm(bookLoanController, bookController, studentController, this);
-        setForm(bookLoanFormDialog);
-        actionButtons.add(retunButton);
         
+        actionButtons.add(retunButton);
     }
     
     private void clickReturnBook() {
-        BookLoan currentBookLoan = getGrid().getSelectedItems().stream().findFirst().get();
+        BookLoan currentBookLoan = getGrid().getSelectedItems().stream().findFirst().orElse(null);
         returnBookDialog = new ReturnBookDialog(currentBookLoan, bookLoanController, this);
     }
 
@@ -59,9 +53,20 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         grid.addColumn(bookLoan -> bookLoan.getStudent().getStudentClass()).setHeader("Turma").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getBookingDate())).setHeader("Data Reserva").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getDueDate())).setHeader("Data Vencimento").setFlexGrow(1).setSortable(true);
-        grid.addColumn(BookLoan::getReturned).setHeader("Retornado").setFlexGrow(1).setSortable(true);
+        grid.addComponentColumn(bookLoan -> createStatusIcon(bookLoan.getReturned())).setHeader("Devolvido").setWidth("1rem").setComparator(BookLoan::getReturned);
         
         refresh();
-        
+    }
+    
+    private Icon createStatusIcon(Boolean returned) {
+        Icon icon;
+        if (returned) {
+            icon = VaadinIcon.CHECK.create();
+            icon.getElement().getThemeList().add("badge success");
+        } else {
+            icon = VaadinIcon.CLOSE_SMALL.create();
+            icon.getElement().getThemeList().add("badge error");
+        }
+        return icon;
     }
 }

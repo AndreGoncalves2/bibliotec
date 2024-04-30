@@ -3,12 +3,13 @@ package br.com.bibliotec.ui.home;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.ui.MainView;
-import br.com.bibliotec.ui.book.BookForm;
+import br.com.bibliotec.ui.book.BookFormDialog;
 import br.com.bibliotec.ui.book.BookGrid;
-import br.com.bibliotec.ui.bookloan.BookLoanForm;
+import br.com.bibliotec.ui.bookloan.BookLoanFormDialog;
 import br.com.bibliotec.ui.bookloan.BookLoanGrid;
-import br.com.bibliotec.ui.student.StudentForm;
+import br.com.bibliotec.ui.student.StudentFormDialog;
 import br.com.bibliotec.ui.student.StudentGrid;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.html.Div;
@@ -27,13 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Route(value = "/", layout = MainView.class)
 public class HomePage extends VerticalLayout {
     
-    private BookController bookController;
-    private BookLoanController bookLoanController;
-    private StudentController studentController;
+    private final BookController bookController;
+    private final BookLoanController bookLoanController;
+    private final StudentController studentController;
 
     public HomePage(@Autowired BookController bookController,
                     @Autowired BookLoanController bookLoanController,
-                    @Autowired StudentController studentController) throws IllegalAccessException {
+                    @Autowired StudentController studentController) throws BibliotecException {
         this.bookController = bookController;
         this.bookLoanController = bookLoanController;
         this.studentController = studentController;
@@ -56,10 +57,10 @@ public class HomePage extends VerticalLayout {
         add(fastActionsLayout);
     }
     
-    private void createFastActions() throws IllegalAccessException {
-        BookForm bookForm = new BookForm(bookController, null);
-        BookLoanForm bookLoanForm = new BookLoanForm(bookLoanController, bookController, studentController, null);
-        StudentForm studentForm = new StudentForm(studentController, null);
+    private void createFastActions() throws  BibliotecException {
+        BookFormDialog bookForm = new BookFormDialog(bookController);
+        BookLoanFormDialog bookLoanForm = new BookLoanFormDialog(bookLoanController, bookController, studentController);
+        StudentFormDialog studentForm = new StudentFormDialog(studentController);
         
         VerticalLayout fastActionsWrapper = new VerticalLayout();
         fastActionsWrapper.addClassName("fast-actions-layout");

@@ -1,4 +1,4 @@
-package br.com.bibliotec.listener;
+package br.com.bibliotec.interfaces;
 
 public interface FormDefinition {
     void open();

@@ -2,8 +2,10 @@ package br.com.bibliotec.ui.componets;
 
 import br.com.bibliotec.controller.helper.GenericController;
 import br.com.bibliotec.exeption.BibliotecException;
-import br.com.bibliotec.listener.FormDefinition;
-import br.com.bibliotec.listener.RefreshListener;
+import br.com.bibliotec.interfaces.FormDefinition;
+import br.com.bibliotec.interfaces.HasId;
+import br.com.bibliotec.interfaces.RefreshListener;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
@@ -15,10 +17,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.RouteConfiguration;
 
 import java.util.List;
 
-public class GenericGrid<T, C extends GenericController<T,?,?>> extends VerticalLayout implements RefreshListener {
+public class GenericGrid<T extends HasId<?>, C extends GenericController<T,?,?>> extends VerticalLayout implements RefreshListener {
     
     C controller;
 
@@ -34,9 +37,13 @@ public class GenericGrid<T, C extends GenericController<T,?,?>> extends Vertical
 
     private List<T> listAllEntity;
     
+    private final String currentParameter;
+    
     
     public GenericGrid(String title, C controller) {
         this.controller = controller;
+        
+        currentParameter = RouteConfiguration.forSessionScope().getUrl(getClass());
         currentGrid = new Grid<>();
         PageTitle pageTitle = new PageTitle(title);
 
@@ -61,19 +68,15 @@ public class GenericGrid<T, C extends GenericController<T,?,?>> extends Vertical
         
         Button addButton = new Button("ADICIONAR");
         addButton.setClassName("button-form");
-        addButton.addClickListener(click -> {
-            currentForm.setNewBean();
-            currentForm.open();
-        });
+        addButton.addClickListener(click -> UI.getCurrent().navigate(currentParameter + "/novo"));
 
         editButton = new Button("EDITAR");
         editButton.addClassName("button-form");
         editButton.addClickListener(click -> {
             try {
-                currentForm.setBinder(getSelectedItem());
-                currentForm.open();
+                UI.getCurrent().navigate(currentParameter + "/" + getSelectedItem().getId());
             } catch (BibliotecException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 

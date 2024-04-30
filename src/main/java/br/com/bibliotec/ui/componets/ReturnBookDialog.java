@@ -2,7 +2,7 @@ package br.com.bibliotec.ui.componets;
 
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.exception.CodeIncorrectException;
-import br.com.bibliotec.listener.RefreshListener;
+import br.com.bibliotec.interfaces.RefreshListener;
 import br.com.bibliotec.model.BookLoan;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;

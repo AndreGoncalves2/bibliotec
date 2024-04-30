@@ -1,5 +1,6 @@
 package br.com.bibliotec.model;
 
+import br.com.bibliotec.interfaces.HasId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -7,7 +8,7 @@ import java.time.LocalDate;
 
 @Table
 @Entity(name = "book_loan")
-public class BookLoan {
+public class BookLoan implements HasId<Long> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,9 +2,9 @@ package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.anotation.Bind;
 import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.Book;
-import br.com.bibliotec.ui.MainView;
-import br.com.bibliotec.ui.componets.GenericForm;
+import br.com.bibliotec.ui.componets.GenericFormDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.notification.Notification;
@@ -13,20 +13,16 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
-import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-@PermitAll
-@Route(value = "/livro", layout = MainView.class)
-public class BookForm extends GenericForm<Book, BookController, Long> {
-
+public class BookFormDialog extends GenericFormDialog<Book, BookController, Long> {
+    
     @Bind("code")
-    private final TextField txtCode;
-
+    private final TextField txtCode; 
+    
     @Bind("title")
     private final TextField txtTitle;
 
@@ -35,12 +31,12 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
 
     @Bind("synopsis")
     private final TextArea txtsynopsis;
-
+    
     private Upload upload;
     
-    public BookForm(@Autowired BookController controller) {
+    public BookFormDialog(@Autowired BookController controller) throws BibliotecException {
         super(controller, Book.class);
-
+        
         createImageInput();
         
         txtCode = new TextField("Código");
@@ -50,19 +46,19 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
         txtAuthor = new TextField("Autor");
         txtsynopsis = new TextArea("Sinopse");
         
-        setDefaultRoute("/livro");
+        createBinder();
         
-        getDivContent().add(upload, txtCode, txtTitle, txtAuthor, txtsynopsis);
+        getFormLayout().add(upload, txtCode, txtTitle, txtAuthor, txtsynopsis);
     }
 
     private void createImageInput() {
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
         upload = new Upload(buffer);
-
+        
         Span label = new Span("Adicione a imagem do livro aqui.");
         label.getStyle().set("vertical-align", "bottom");
         upload.setDropLabel(label);
-
+        
         upload.setUploadButton(new Button("Adicionar imagem"));
         upload.setAcceptedFileTypes(".png", ".jpg", ".jpeg");
         upload.setMaxFiles(1);

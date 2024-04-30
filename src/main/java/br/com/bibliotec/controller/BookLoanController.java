@@ -18,7 +18,7 @@ public class BookLoanController extends GenericController<BookLoan, Long, BookLo
         if(entity.getBook().getCode().equals(bookCode)) {
             repository.updateReturned(entity.getId(), true);
         } else {
-            throw new CodeIncorrectException("O código informado não corresponde ao livro selecionado.");
+            throw new CodeIncorrectException("O código informado não corresponde ao livro do empréstimo selecionado.");
         }
     }
     

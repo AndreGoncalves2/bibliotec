@@ -23,12 +23,9 @@ import java.io.IOException;
 @Route(value = "/livro", layout = MainView.class)
 public class BookGrid extends GenericGrid<Book, BookController> {
 
-    public BookGrid(@Autowired BookController bookController) throws IllegalAccessException {
+    public BookGrid(@Autowired BookController bookController) {
         super("LIVROS", bookController);
         creatGrid();
-
-        BookForm bookForm = new BookForm(bookController, this);
-        setForm(bookForm);
     }
 
     private void creatGrid() {

@@ -25,6 +25,8 @@ public class StudentForm extends GenericForm<Student, StudentController, Long> {
     public StudentForm(StudentController controller) {
         super(controller, Student.class);
 
+        setTitleParameter("ALUNO");
+        
         txtRa = new TextField("RA");
         txtRa.setAllowedCharPattern("[0-9]");
         txtRa.setMinLength(10);
@@ -35,6 +37,6 @@ public class StudentForm extends GenericForm<Student, StudentController, Long> {
         
         setDefaultRoute("aluno");
         
-        getDivContent().add(txtRa, txtName, txtStudentClass);
+        getFormLayout().add(txtRa, txtName, txtStudentClass);
     }
 }

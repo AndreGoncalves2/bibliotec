@@ -16,20 +16,19 @@ import com.vaadin.flow.data.binder.ValidationException;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T,I,?>, I> extends Dialog {
+public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T, I, ?>, I> extends Dialog {
     
     private T currentEntity;
     private final C controller;
-    protected Class<T> beanType;
     
-    private Button confirmButton;
+    protected Class<T> beanType;
+    private final Binder<T, I, C> binder;
+    
     private Button saveButton;
-
-    private final FormLayout formLayout;
-    private Dialog deleteDialog;
     private Button cancelButton;
 
-    private final Binder<T, I, C> binder;
+    private final FormLayout formLayout;
+
     
     public GenericFormDialog(C controller, Class<T> beanType) {
         this.controller = controller;
@@ -67,8 +66,12 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
         HorizontalLayout displayButtons = new HorizontalLayout();
         
         Button exitButton = new Button(new Icon(VaadinIcon.CLOSE_BIG));
-        saveButton = new Button("Salvar");
-        cancelButton = new Button("Cancelar");
+        
+        saveButton = new Button("SALVAR");
+        cancelButton = new Button("CANCELAR");
+        
+        saveButton.addClassName("button-form-confirm");
+        cancelButton.addClassName("button-form-delete");
         
         cancelButton.addClickListener(click -> close());
         exitButton.addClickListener(click -> close());

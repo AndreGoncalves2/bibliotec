@@ -1,0 +1,100 @@
+.generic-form {
+    margin: 2rem auto 0;
+    max-width: fit-content;
+
+    padding-block: 3.5rem;
+
+    flex-direction: column;
+    align-items: center;
+
+
+    background-color: white;
+    border: 1px solid var(--text-black-color);
+    border-radius: .3rem;
+}
+
+.div-content {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+    padding-inline: 3rem;
+}
+
+.div-footer-form {
+    display: flex;
+    gap: 1rem;
+    width: 80%;
+    justify-content: flex-end;
+}
+
+.button-form-delete,
+.button-form-confirm {
+    font-weight: bold;
+    font-size: .9rem;
+    color: white;
+    border: 1px solid var(--black-color);
+    background-color: var(--blue-color);
+
+    padding: 1.3rem 1.8rem;
+    margin-top: 3rem;
+
+    transition: 0.3s;
+}
+
+.button-form-delete {
+    background-color: hsl(3, 79%, 49%);
+}
+
+.button-form-delete:hover {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    background-color: hsl(3, 79%, 46%);
+    cursor: pointer;
+}
+
+.button-form-confirm:hover {
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    background-color: rgba(43, 50, 215, 0.56);
+    cursor: pointer;
+}
+
+vaadin-text-field::part(input-field){
+    background-color: white;
+    border: 1px solid var(--text-black-color);
+}
+
+vaadin-combo-box::part(input-field){
+    background-color: white;
+    border: 1px solid var(--text-black-color);
+}
+
+vaadin-date-picker::part(input-field){
+    background-color: white;
+    border: 1px solid var(--text-black-color);
+}
+
+
+vaadin-upload {
+    display: flex;
+    justify-content: center;
+    background-color: var(--lumo-tint-10pct) ;
+}
+
+vaadin-upload::part(primary-buttons) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+vaadin-upload > [slot="drop-label-icon"]::before {
+    display: none;
+}
+
+vaadin-upload > vaadin-button {
+    background-color: var(--blue-color);
+    color: white;
+}
+vaadin-upload > vaadin-button[disabled] {
+    background-color: rgba(83, 90, 255, 0.26);
+    border: 1px dashed gray;
+}
+

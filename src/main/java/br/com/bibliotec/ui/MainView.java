@@ -6,7 +6,6 @@ import br.com.bibliotec.ui.home.HomePage;
 import br.com.bibliotec.ui.student.StudentGrid;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -32,7 +31,6 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         
         HorizontalLayout tileContainer = new HorizontalLayout();
         HorizontalLayout layoutButtons = createHeader();
-        HorizontalLayout pageTitle = createPageTitle();
         
         tileContainer.setClassName("title-container");
         
@@ -40,7 +38,7 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         
         tileContainer.add(title);
         
-        container.add(tileContainer, layoutButtons, pageTitle);
+        container.add(tileContainer, layoutButtons);
         addToNavbar(container);
     }
     
@@ -85,19 +83,7 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         return layout;
     }
     
-    private HorizontalLayout createPageTitle() {
-        HorizontalLayout layout = new HorizontalLayout();
-        layout.addClassName("school-name-container");
-        
-        H1 start = new H1("BIBLIOTECA DIGITAL DA");
-        H1 end = new H1("ESCOLA MUNICIPAL JAGS");
-        
-        start.addClassName("title-start");
-        end.addClassName("title-end");
-        
-        layout.add(start, end);
-        return layout;
-    }
+   
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {

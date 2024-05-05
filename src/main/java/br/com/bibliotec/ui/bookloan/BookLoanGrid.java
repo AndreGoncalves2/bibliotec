@@ -13,6 +13,7 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @PermitAll
@@ -46,14 +47,23 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
 
     private void creatGrid() {
         Grid<BookLoan> grid = getGrid();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        grid.addClassName("grid");
         
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         grid.addColumn(bookLoan -> bookLoan.getBook().getTitle()).setHeader("Título").setFlexGrow(3).setSortable(true);
         grid.addColumn(bookLoan -> bookLoan.getStudent().getName()).setHeader("Aluno").setFlexGrow(3).setSortable(true);
         grid.addColumn(bookLoan -> bookLoan.getStudent().getStudentClass()).setHeader("Turma").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getBookingDate())).setHeader("Data Reserva").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getDueDate())).setHeader("Data Vencimento").setFlexGrow(1).setSortable(true);
         grid.addComponentColumn(bookLoan -> createStatusIcon(bookLoan.getReturned())).setHeader("Devolvido").setWidth("1rem").setComparator(BookLoan::getReturned);
+        
+        grid.setPartNameGenerator(bookLoan -> {
+            if (LocalDate.now().isAfter(bookLoan.getDueDate()) && !bookLoan.getReturned()) {
+                return "late";
+            }
+            return null;
+        });
         
         refresh();
     }

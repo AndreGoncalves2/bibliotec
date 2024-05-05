@@ -3,7 +3,6 @@ package br.com.bibliotec.model;
 import br.com.bibliotec.interfaces.HasId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 @Table
@@ -15,7 +14,7 @@ public class Book implements HasId<Long> {
     @Column(name = "id")
     private Long id;
     
-    @NotNull
+    @NotBlank
     @Column(name = "code", updatable = false)
     private String code;
     

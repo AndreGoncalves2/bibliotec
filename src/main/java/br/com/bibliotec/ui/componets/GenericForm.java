@@ -8,8 +8,8 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,54 +26,73 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
     private final C controller;
     
     private final Div divTop;
-    private final Div divContent;
+    private final FormLayout formLayout;
     private final Div divFooter;
     
-    private final H1 title;
+    private PageTitle title;
     
-    private final Button confirmButton;
-    private final Button deleteButton;
+    private Button confirmButton;
+    private Button deleteButton;
+    private Button cancelButton;
     private Dialog deleteDialog;
 
     protected Class<T> beanType;
     private final Binder<T, I, C> binder;
     
     private String defaultRoute;
-    
+    private String titleParameter;
     
     public GenericForm(C controller, Class<T> beanType) {
         this.controller = controller;
         this.beanType = beanType;
-
         binder = new Binder<>(beanType, this, controller);
         
+        VerticalLayout mainContainer = new VerticalLayout();
+        
         divTop = new Div();
-        divContent = new Div();
+        formLayout = new FormLayout();
         divFooter = new Div();
-        title = new H1();
         
-        confirmButton = new Button("Confirmar");
-        confirmButton.addClickListener(click -> {
-            try {
-                handleSaveButton();
-            } catch (ValidationException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        divTop.addClassName("div-top-form");
+        formLayout.addClassName("div-content-form");
+        divFooter.addClassName("div-footer-form");
+        
+        mainContainer.addClassName("generic-form");
+        formLayout.addClassName("div-content");
+        
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
+        
+        mainContainer.add(divTop, formLayout, divFooter);
+        
+        add(mainContainer);
+    }
 
-        createDeleteDialog();
-        
-        deleteButton = new Button("Excluir");
+    private void creteButtons(String urlParameter) {
+        confirmButton = new Button("SALVAR");
+        cancelButton = new Button("CANCELAR");
+        deleteButton = new Button("EXCLUIR");
+
+        confirmButton.addClassName("button-form-confirm");
+        cancelButton.addClassName("button-form-delete");
+        deleteButton.addClassName("button-form-delete");
+
+        confirmButton.addClickListener(click -> handleSaveButton());
+        cancelButton.addClickListener(click -> UI.getCurrent().navigate(defaultRoute));
         deleteButton.addClickListener(click -> deleteDialog.open());
-        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_PRIMARY);
         
+        if (urlParameter.equals("novo")) {
+            divFooter.addComponentAsFirst(cancelButton);
+        } else {
+            divFooter.addComponentAsFirst(deleteButton);
+        }
         
-        divFooter.add(confirmButton, deleteButton);
-        add(title, divTop, divContent, divFooter);
+        divFooter.add(confirmButton);
+        createDeleteDialog();
     }
 
     private void createDeleteDialog() {
         deleteDialog = new Dialog();
+        
         Button confirmDeleteButton = new Button("Excluir");
         Button cancelButton = new Button("Cancelar");
         
@@ -99,10 +118,9 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         }
     }
 
-    public void handleSaveButton() throws ValidationException {
-        binder.writeBean(currentEntity);
-
-        if (binder.isValid()) {
+    public void handleSaveButton() {
+        try {
+            binder.writeBean(currentEntity);
             try {
                 if (currentEntity.getId() == null) {
                     controller.save(currentEntity);
@@ -115,6 +133,8 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
                 Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_WARNING);
                 e.printStackTrace();
             }
+        } catch (ValidationException e) {
+            e.printStackTrace();
         }
     }
 
@@ -133,6 +153,23 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
 
     @Override
     public void setParameter(BeforeEvent beforeEvent, String parameter) {
+        
+        processBinderCreation(parameter);
+        configureTitlePage(parameter);
+        creteButtons(parameter);
+    }
+
+    private void configureTitlePage(String parameter) {
+        if (parameter.equals("novo")) {
+            title = new PageTitle("ADICIONAR " + titleParameter);
+        } else {
+            title = new PageTitle("EDITAR " + titleParameter);
+        }
+        
+        addComponentAsFirst(title);
+    }
+
+    private void processBinderCreation(String parameter) {
         if (parameter.equals("novo")) {
             try {
                 binder.createBinder();
@@ -153,16 +190,16 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         }
     }
 
-    public void setTitle(String title) {
-       this.title.setText(title);
+    public void setTitleParameter(String titleParameter) {
+        this.titleParameter = titleParameter;
     }
 
     public Binder<T, I, C> getBinder() {
         return binder;
     }
     
-    public Div getDivContent() {
-        return divContent;
+    public FormLayout getFormLayout() {
+        return formLayout;
     }
     
     public Div getDivFooter() {

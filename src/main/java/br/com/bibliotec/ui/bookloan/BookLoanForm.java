@@ -15,8 +15,6 @@ import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
-
 @PermitAll
 @Route(value = "/emprestimo", layout = MainView.class)
 public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Long> {
@@ -38,6 +36,8 @@ public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Lon
                         @Autowired StudentController studentController) {
         
         super(controller, BookLoan.class);
+        
+        setTitleParameter("EMPRÉSTIMO");
 
         bookComboBox = new ComboBox<>("Livro");
         bookComboBox.setItemLabelGenerator(Book::getTitle);
@@ -46,7 +46,6 @@ public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Lon
         bookingDate = new DatePicker("Data do empréstimo");
         dueDate = new DatePicker("Data do vencimento");
 
-        bookingDate.setValue(LocalDate.now());
         bookingDate.addValueChangeListener(event -> dueDate.setMin(event.getValue()));
 
         studentComboBox = new ComboBox<>("Aluno");
@@ -54,6 +53,7 @@ public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Lon
         studentComboBox.setItems(studentController.list());
         
         setDefaultRoute("/emprestimo");
-        getDivContent().add(bookComboBox, bookingDate, dueDate, studentComboBox);
+        
+        getFormLayout().add(studentComboBox, bookComboBox, bookingDate, dueDate);
     }
 }

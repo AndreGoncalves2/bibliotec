@@ -21,7 +21,7 @@ public class ReturnBookDialog extends Dialog {
         setHeaderTitle("Devolução de livro");
         txtBookCode = new TextField("Código do livro");
         
-        confirmButton = new Button("Confirmar");
+        confirmButton = new Button("SALVAR");
         confirmButton.addClickListener(click -> {
             try {
                 bookLoanController.setReturned(bookLoan, txtBookCode.getValue());

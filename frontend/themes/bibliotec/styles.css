@@ -2,6 +2,7 @@
 @import "../../../src/main/resources/META-INF/resources/components/grid.css";
 @import "../../../src/main/resources/META-INF/resources/components/homePage.css";
 @import "../../../src/main/resources/META-INF/resources/components/login.css";
+@import "../../../src/main/resources/META-INF/resources/components/form.css";
 
 :root {
     --lumo-tint-10pct: rgba(0, 0, 0, 0.1);
@@ -17,6 +18,9 @@
     --text-home-black-color: #333333;
     --text-blue-color: #43499F;
     
+    --lumo-contrast-60pct: var(--blue-color);
+    --lumo-secondary-text-color: --lumo-body-text-color;
+    --lumo-primary-text-color:  #43499F;
     --vaadin-input-field-placeholder-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -24,7 +28,17 @@ body {
     background-color: var(--background-color);
 }
 
-/*// login apagaaaaaaaaar*/
+vaadin-dialog-overlay > [slot="title"] {
+    color: var(--black-color);
+}
+
+
+
+
+
+
+
+
 
 
 

@@ -10,6 +10,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -48,7 +50,9 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         binder = new Binder<>(beanType, this, controller);
         
         VerticalLayout mainContainer = new VerticalLayout();
-        
+
+        Button returnButton = createReturnButton();
+
         divTop = new Div();
         formLayout = new FormLayout();
         divFooter = new Div();
@@ -60,11 +64,22 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         mainContainer.addClassName("generic-form");
         formLayout.addClassName("div-content");
         
-        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 2));
-        
-        mainContainer.add(divTop, formLayout, divFooter);
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+         
+        mainContainer.add(returnButton, divTop, formLayout, divFooter);
         
         add(mainContainer);
+    }
+
+    private Button createReturnButton() {
+        Icon returnIcon = VaadinIcon.ARROW_BACKWARD.create();
+        Button button = new Button(returnIcon);
+        
+        button.addClassName("return-button");
+        
+        button.addClickListener(click -> UI.getCurrent().navigate(defaultRoute));
+
+        return button;
     }
 
     private void creteButtons(String urlParameter) {

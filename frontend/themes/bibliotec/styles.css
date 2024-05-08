@@ -9,10 +9,11 @@
     --lumo-body-text-color: black;
     --vaadin-grid-cell-background: white;
     --lumo-base-color: white;
-    --blue-color: rgba(83, 90, 255, 0.56);
+    --blue-color: #082A5C;
     --black-color: #262626;
-    --background-color: #E0F0FF;
+    --background-color: #B1CDE7;
     --box-shadown: #1E1E1E;
+    --button-hover-color: rgba(8, 42, 92, 0.95);
     
     --text-black-color: #1A1A1A;
     --text-home-black-color: #333333;
@@ -22,6 +23,8 @@
     --lumo-secondary-text-color: --lumo-body-text-color;
     --lumo-primary-text-color:  #43499F;
     --vaadin-input-field-placeholder-color: rgba(0, 0, 0, 0.3);
+    
+    font-size: 14px;
 }
 
 body {
@@ -31,6 +34,8 @@ body {
 vaadin-dialog-overlay > [slot="title"] {
     color: var(--black-color);
 }
+
+
 
 
 

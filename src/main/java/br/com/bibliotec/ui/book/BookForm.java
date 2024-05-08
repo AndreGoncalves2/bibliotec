@@ -64,7 +64,7 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
         MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
         upload = new CustomUpload(buffer);
 
-        Span label = new Span("Adicione a imagem do livro aqui.");
+        Span label = new Span("Adicione a imagem do livro.");
         label.getStyle().set("vertical-align", "bottom");
         upload.setDropLabel(label);
 
@@ -103,7 +103,7 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
     }
     
     private void removeImage() {
-        upload.setDropLabel(new Span("Adicione a imagem do livro aqui."));
+        upload.setDropLabel(new Span("Adicione a imagem do livro."));
         getBinder().getValue().setImage(null);
     }
 }

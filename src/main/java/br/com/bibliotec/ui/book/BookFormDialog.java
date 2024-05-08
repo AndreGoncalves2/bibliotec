@@ -61,7 +61,7 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
         
         upload.setUploadButton(new Button("Adicionar imagem"));
         upload.setAcceptedFileTypes(".png", ".jpg", ".jpeg");
-        upload.setDropLabel(new Span("Adicione a imagem do livro aqui."));
+        upload.setDropLabel(new Span("Adicione a imagem do livro."));
         upload.setMaxFiles(1);
         
         upload.addFileRemoveListener(this::removeImage);
@@ -96,7 +96,7 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
     }
     
     private void removeImage() {
-        upload.setDropLabel(new Span("Adicione a imagem do livro aqui."));
+        upload.setDropLabel(new Span("Adicione a imagem do livro."));
         getBinder().getValue().setImage(null);
     }
 }

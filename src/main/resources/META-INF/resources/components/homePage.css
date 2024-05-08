@@ -91,7 +91,6 @@ H4{
 }
 
 .fast-actions-layout .fast-action {
-
     padding: 1rem 1rem;
     border-radius: .3rem;
     width: 50rem;
@@ -106,6 +105,7 @@ H4{
 .fast-actions-layout .fast-action h4 {
     margin: 0;
     font-weight: bold;
+    color: #FFFFFF;
 }
 
 .fast-actions-layout .fast-action div {

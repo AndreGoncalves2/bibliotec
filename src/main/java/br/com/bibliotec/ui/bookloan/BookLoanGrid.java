@@ -1,11 +1,13 @@
 package br.com.bibliotec.ui.bookloan;
 
 import br.com.bibliotec.controller.BookLoanController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.GenericGrid;
 import br.com.bibliotec.ui.componets.ReturnBookDialog;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -41,8 +43,12 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
     }
     
     private void clickReturnBook() {
-        BookLoan currentBookLoan = getGrid().getSelectedItems().stream().findFirst().orElse(null);
-        returnBookDialog = new ReturnBookDialog(currentBookLoan, bookLoanController, this);
+        try {
+            BookLoan currentBookLoan = getSelectedItem();
+            returnBookDialog = new ReturnBookDialog(currentBookLoan, bookLoanController, this);
+        } catch (BibliotecException e) {
+            e.printStackTrace();
+        }
     }
 
     private void creatGrid() {
@@ -56,18 +62,23 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         grid.addColumn(bookLoan -> bookLoan.getStudent().getStudentClass()).setHeader("Turma").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getBookingDate())).setHeader("Data Reserva").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getDueDate())).setHeader("Data Vencimento").setFlexGrow(1).setSortable(true);
-        grid.addComponentColumn(bookLoan -> createStatusIcon(bookLoan.getReturned())).setHeader("Devolvido").setWidth("1rem").setComparator(BookLoan::getReturned);
+        grid.addComponentColumn(bookLoan -> createStatusIcon(bookLoan.getReturned())).setTextAlign(ColumnTextAlign.CENTER).setHeader("Devolvido").setWidth("1rem").setComparator(BookLoan::getReturned);
+        grid.addComponentColumn(bookLoan -> lateInstallment(bookLoan) ? createStatusIcon(true) : createStatusIcon(false))
+                .setTextAlign(ColumnTextAlign.CENTER).setHeader("Atrasado").setComparator(BookLoanGrid::lateInstallment);
         
         grid.setPartNameGenerator(bookLoan -> {
-            if (LocalDate.now().isAfter(bookLoan.getDueDate()) && !bookLoan.getReturned()) {
-                return "late";
-            }
+            if (lateInstallment(bookLoan)) return "late";
+            
             return null;
         });
         
         refresh();
     }
-    
+
+    private static boolean lateInstallment(BookLoan bookLoan) {
+        return LocalDate.now().isAfter(bookLoan.getDueDate()) && !bookLoan.getReturned();
+    }
+
     private Icon createStatusIcon(Boolean returned) {
         Icon icon;
         if (returned) {
@@ -79,4 +90,6 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         }
         return icon;
     }
+    
+//    mexer no dialog de devolucao, dps na logica de novo emprestimo com livo atrasado. Pagina de login
 }

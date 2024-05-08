@@ -14,7 +14,7 @@
     width: 100%;
 
     border-block: 1px solid var(--black-color);
-    background-color: white;
+    background-color: var(--blue-color);
 }
 
 .title-container {
@@ -23,7 +23,7 @@
     border-radius: .25rem;
 
     border: 1px solid var(--black-color);
-    background-color: var(--blue-color);
+    background-color: white;
 }
 
 .header-container h4 {
@@ -54,6 +54,7 @@
 .div-link-config {
     padding-block: .6rem;
     border-left: 1px solid var(--black-color);
+    background-color: white;
 }
 
 .div-link-config {
@@ -91,5 +92,22 @@
     font-size: 2.5rem;
     margin-top: 1rem;
     color: var(--text-blue-color);
+}
+
+.div-selected {
+    background-color:  rgba(8, 42, 92, 0.95);
+}
+
+.div-links-start.div-selected {
+    border-right-color: rgb(160, 160, 160) ;
+}
+
+.div-links-right.div-selected {
+    border-left-color: rgb(160, 160, 160)
+}
+
+
+.div-selected a {
+    color: #FFFFFF;
 }
 

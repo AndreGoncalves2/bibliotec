@@ -25,7 +25,7 @@ import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PermitAll
-@Route(value = "/", layout = MainView.class)
+@Route(value = "/home", layout = MainView.class)
 public class HomePage extends VerticalLayout {
     
     private final BookController bookController;

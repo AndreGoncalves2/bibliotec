@@ -1,3 +1,4 @@
+
 .default-form-layout {
     align-items: center;
 }
@@ -16,9 +17,10 @@
     text-align: center;
 
     font-weight: bold;
+    font-size: 2.5rem;
 
     border-bottom: 2px solid var(--text-blue-color);
-    color: var(--text-black-color);
+    color: var(--background-color);
 }
 
 .form-layout {
@@ -32,6 +34,7 @@
 .form-layout vaadin-text-field,
 .form-layout vaadin-password-field {
     width: 70%;
+    font-size: 1.2rem;
 }
 
 .form-layout vaadin-text-field vaadin-icon,
@@ -52,10 +55,21 @@
 }
 
 .form-layout vaadin-button {
-    background-color: var(--text-blue-color);
+    background-color: var(--background-color);
     border-radius: .9rem;
     width: 40%;
+    font-weight: bold;
+    font-size: 1.3rem;
+    padding-block: 1.3rem;
+    transition: 0.3s;
 }
+
+.form-layout vaadin-button:hover {
+    background-color: rgba(177,205,231, .9);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
 .form-layout .btn-login {
     margin-top: 1rem;
 }

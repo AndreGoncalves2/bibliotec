@@ -11,9 +11,11 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 @StyleSheet("components/pageTitle.css")
 public class PageTitle extends VerticalLayout {
 
+    private Div pageTitleContainer;
+
     public PageTitle(String title) {
         setAlignItems(Alignment.CENTER);
-        Div pageTitleContainer = new Div();
+        pageTitleContainer = new Div();
         H2 pageTitle = new H2(title);
 
         pageTitleContainer.add(pageTitle);
@@ -35,5 +37,9 @@ public class PageTitle extends VerticalLayout {
 
         layout.add(start, end);
         return layout;
+    }
+    
+    public void enableTitleContainer(Boolean enableTitleContainer) {
+        pageTitleContainer.setVisible(enableTitleContainer);
     }
 }

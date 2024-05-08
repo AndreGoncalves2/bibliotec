@@ -38,7 +38,10 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
 
         binder = new Binder<>(beanType, this, controller);
         this.formLayout = new FormLayout();
-        formLayout.setMaxWidth("500px");
+        formLayout.getStyle().set("padding", "3rem");
+        formLayout.setMaxWidth("30rem");
+        formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        
         createButtons();
         
         add(formLayout);

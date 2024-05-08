@@ -18,10 +18,15 @@ public class ReturnBookDialog extends Dialog {
     
     public ReturnBookDialog(BookLoan bookLoan, BookLoanController bookLoanController, RefreshListener refreshListener) {
         
-        setHeaderTitle("Devolução de livro");
+        setHeaderTitle("Devolver livro");
         txtBookCode = new TextField("Código do livro");
         
         confirmButton = new Button("SALVAR");
+        cancelButton= new Button("Cancelar");
+        
+        confirmButton.addClassName("button-form-confirm");
+        cancelButton.addClassName("button-form-delete");
+        
         confirmButton.addClickListener(click -> {
             try {
                 bookLoanController.setReturned(bookLoan, txtBookCode.getValue());
@@ -33,7 +38,6 @@ public class ReturnBookDialog extends Dialog {
             }
         });
 
-        cancelButton= new Button("Cancelar");
         cancelButton.addClickListener(click -> close());
         
         add(txtBookCode);

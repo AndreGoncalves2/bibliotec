@@ -47,11 +47,12 @@ public class LoginView extends VerticalLayout {
         VerticalLayout cardLayout = new VerticalLayout();
         
         txtUser = new TextField();
-        txtUser.setPrefixComponent(LumoIcon.USER.create());
-        txtUser.setPlaceholder("Usuário");
-
         txtPassword = new PasswordField();
+        
+        txtUser.setPrefixComponent(LumoIcon.USER.create());
         txtPassword.setPrefixComponent(VaadinIcon.LOCK.create());
+        
+        txtUser.setPlaceholder("Usuário");
         txtPassword.setPlaceholder("Senha");
         
         loginButton.addClassName("btn-login");
@@ -83,7 +84,7 @@ public class LoginView extends VerticalLayout {
                 UI.getCurrent().getPage().executeJs("document.getElementById(\"username\").value = \""+user.getUsername()+"\"; "
                         + "document.getElementById(\"password\").value = \""+user.getPassword()+"\"; "
                         + "document.f.submit();");
-                UI.getCurrent().navigate("/");
+                UI.getCurrent().navigate("/home");
             } else {
                 Notification.show("Usuário ou senha incorreta.").addThemeVariants(NotificationVariant.LUMO_WARNING);
                 txtUser.clear();

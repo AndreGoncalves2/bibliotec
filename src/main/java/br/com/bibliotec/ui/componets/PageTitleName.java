@@ -9,11 +9,11 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 @StyleSheet("components/pageTitle.css")
-public class PageTitle extends VerticalLayout {
+public class PageTitleName extends VerticalLayout {
 
-    private Div pageTitleContainer;
+    private final Div pageTitleContainer;
 
-    public PageTitle(String title) {
+    public PageTitleName(String title) {
         setAlignItems(Alignment.CENTER);
         pageTitleContainer = new Div();
         H2 pageTitle = new H2(title);

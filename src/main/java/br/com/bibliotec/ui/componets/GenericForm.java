@@ -31,10 +31,10 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
     private final FormLayout formLayout;
     private final Div divFooter;
     
-    private PageTitle title;
+    private PageTitleName title;
     
+    private final Button deleteButton ;
     private Button confirmButton;
-    private Button deleteButton;
     private Button cancelButton;
     private Dialog deleteDialog;
 
@@ -48,7 +48,8 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         this.controller = controller;
         this.beanType = beanType;
         binder = new Binder<>(beanType, this, controller);
-        
+
+        deleteButton = new Button("EXCLUIR");
         VerticalLayout mainContainer = new VerticalLayout();
 
         Button returnButton = createReturnButton();
@@ -85,7 +86,6 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
     private void creteButtons(String urlParameter) {
         confirmButton = new Button("SALVAR");
         cancelButton = new Button("CANCELAR");
-        deleteButton = new Button("EXCLUIR");
 
         confirmButton.addClassName("button-form-confirm");
         cancelButton.addClassName("button-form-delete");
@@ -133,7 +133,7 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         }
     }
 
-    public void handleSaveButton() {
+    protected void handleSaveButton() {
         try {
             binder.writeBean(currentEntity);
             try {
@@ -176,9 +176,9 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
 
     private void configureTitlePage(String parameter) {
         if (parameter.equals("novo")) {
-            title = new PageTitle("ADICIONAR " + titleParameter);
+            title = new PageTitleName("ADICIONAR " + titleParameter);
         } else {
-            title = new PageTitle("EDITAR " + titleParameter);
+            title = new PageTitleName("EDITAR " + titleParameter);
         }
         
         addComponentAsFirst(title);
@@ -223,5 +223,9 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
     
     public Div getDivTop() {
         return divTop;
+    }
+    
+    public void setButtonDeleteVisible(boolean deleteVisible) {
+        deleteButton.setVisible(deleteVisible);
     }
 }

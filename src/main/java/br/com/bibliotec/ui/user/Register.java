@@ -6,7 +6,7 @@ import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
-import br.com.bibliotec.ui.componets.PageTitle;
+import br.com.bibliotec.ui.componets.PageTitleName;
 import br.com.bibliotec.ui.helper.Binder;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -30,11 +30,11 @@ public class Register extends VerticalLayout {
     @Bind("username")
     private final TextField txtName;
     
-    @Bind("password")
-    private final PasswordField txtPassword;
-    
     @Bind("email")
     private final TextField txtEmail;
+    
+    @Bind("password")
+    private final PasswordField txtPassword;
     
     private final PasswordField txtConfirmPassword;
 
@@ -45,7 +45,7 @@ public class Register extends VerticalLayout {
         binder = new Binder<>(User.class, this, controller);
         this.controller = controller;
         
-        PageTitle pageTitle = new PageTitle("");
+        PageTitleName pageTitle = new PageTitleName("");
         pageTitle.enableTitleContainer(false);
         
         H2 registerTitle = new H2("CRIE SUA CONTA");

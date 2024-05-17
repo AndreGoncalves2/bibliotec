@@ -3,6 +3,7 @@
 @import "../../../src/main/resources/META-INF/resources/components/homePage.css";
 @import "../../../src/main/resources/META-INF/resources/components/login.css";
 @import "../../../src/main/resources/META-INF/resources/components/form.css";
+@import "../../../src/main/resources/META-INF/resources/components/settingsPage.css";
 
 :root {
     --lumo-tint-10pct: rgba(0, 0, 0, 0.1);
@@ -34,7 +35,6 @@ body {
 vaadin-dialog-overlay > [slot="title"] {
     color: var(--black-color);
 }
-
 
 
 

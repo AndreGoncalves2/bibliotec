@@ -73,3 +73,23 @@
 .form-layout .btn-login {
     margin-top: 1rem;
 }
+
+/*CONFIG PAGE*/
+
+.link-container {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+
+    color: var(--text-home-black-color);
+    border-bottom: 1px solid var(--black-color);
+    margin-left: 30%;
+
+    width: 30%;
+}
+
+.link-container span:hover {
+    cursor: pointer;
+}
+
+

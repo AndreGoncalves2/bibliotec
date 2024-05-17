@@ -1,0 +1,46 @@
+.user-settings .generic-form {
+    background-color: var(--blue-color);
+    border-radius: .6rem;
+    width: 30% !important;
+    max-width: initial;
+    padding-block: 1.5rem;
+}
+
+.card-default-form {
+    padding-top: .5rem;
+    margin: 0;
+    border: none;
+    width: 100%;
+}
+
+.card-default-form h2 {
+    width: 100%;
+    padding-top: 0;
+}
+
+.div-top-form {
+    width: 100%;
+}
+
+.user-settings .form-layout {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.user-settings .div-content-form  {
+    margin: 0;
+    width: 100%;
+    padding: 0;
+}
+
+.user-settings .button-form-confirm {
+    background-color: var(--background-color);
+    color: var(--text-blue-color);
+    font-weight: bold;
+}
+
+.user-settings .return-button {
+    background-color: transparent;
+    color: var(--background-color);
+}

@@ -4,6 +4,7 @@ import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
+import br.com.bibliotec.ui.componets.PageTitleName;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
@@ -27,21 +28,24 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 public class LoginView extends VerticalLayout {
 
     private final TextField txtUser;
-
     private final PasswordField txtPassword;
-
     private final UserController controller;
+    
+    
 
     public LoginView(@Autowired UserController controller) {
 
         addClassName("default-form-layout");
 
         this.controller = controller;
+        
+        
         setSizeFull();
 
         H2 loginTitle = new H2("FAÇA LOGIN");
         Button loginButton = new Button("entrar");
         Button registerButton = new Button("criar conta");
+        PageTitleName pageTitleName = new PageTitleName("");
 
         VerticalLayout form = new VerticalLayout();
         VerticalLayout cardLayout = new VerticalLayout();
@@ -51,12 +55,15 @@ public class LoginView extends VerticalLayout {
         
         txtUser.setPrefixComponent(LumoIcon.USER.create());
         txtPassword.setPrefixComponent(VaadinIcon.LOCK.create());
+        pageTitleName.enableTitleContainer(false);
         
         txtUser.setPlaceholder("Usuário");
         txtPassword.setPlaceholder("Senha");
         
         loginButton.addClassName("btn-login");
+        
         loginButton.addClickListener(click -> handleClickLogin());
+        registerButton.addClickListener(click -> UI.getCurrent().navigate("/registrar"));
 
         form.addClassName("form-layout");
         form.add(txtUser, txtPassword, loginButton, registerButton);
@@ -64,7 +71,7 @@ public class LoginView extends VerticalLayout {
         cardLayout.addClassName("card-default-form");
 
         cardLayout.add(loginTitle, form);
-        add(cardLayout);
+        add(pageTitleName, cardLayout);
 
         Html formHtml = new Html(
                 "<form name=\"f\" th:action=\"@{/login}\" method=\"post\">"

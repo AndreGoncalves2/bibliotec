@@ -3,6 +3,7 @@ package br.com.bibliotec.ui;
 import br.com.bibliotec.ui.book.BookGrid;
 import br.com.bibliotec.ui.bookloan.BookLoanGrid;
 import br.com.bibliotec.ui.home.HomePage;
+import br.com.bibliotec.ui.settings.SettingsPage;
 import br.com.bibliotec.ui.student.StudentGrid;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Div;
@@ -65,7 +66,7 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         RouterLink bookLink = new RouterLink("LIVROS", BookGrid.class);
         RouterLink studentLink = new RouterLink("ALUNOS", StudentGrid.class);
         RouterLink loanLink = new RouterLink("EMPRÉSTIMOS", BookLoanGrid.class);
-        RouterLink configLink = new RouterLink("CONFIGURAÇÕES", BookLoanGrid.class);
+        RouterLink configLink = new RouterLink("CONFIGURAÇÕES", SettingsPage.class);
         
         startDiv.add(startLink);
         bookDiv.add(bookLink);
@@ -91,13 +92,13 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
         String route = event.getLocation().getPath();
-
-        // Crie um mapa para associar rotas a divs
+        
         Map<String, Div> routeToDivMap = new HashMap<>();
         routeToDivMap.put("livro", bookDiv);
         routeToDivMap.put("aluno", studentDiv);
         routeToDivMap.put("emprestimo", loanDiv);
         routeToDivMap.put("home", startDiv);
+        routeToDivMap.put("configuracoes", configDiv);
         
         routeToDivMap.values().forEach(div -> div.removeClassName("div-selected"));
 

@@ -45,7 +45,7 @@ public class GenericGrid<T extends HasId<?>, C extends GenericController<T,?,?>>
         
         currentParameter = RouteConfiguration.forSessionScope().getUrl(getClass());
         currentGrid = new Grid<>();
-        PageTitle pageTitle = new PageTitle(title);
+        PageTitleName pageTitle = new PageTitleName(title);
 
         actionButtons = createActionButtons();
 

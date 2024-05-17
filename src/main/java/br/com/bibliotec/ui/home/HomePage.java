@@ -9,6 +9,7 @@ import br.com.bibliotec.ui.book.BookFormDialog;
 import br.com.bibliotec.ui.book.BookGrid;
 import br.com.bibliotec.ui.bookloan.BookLoanFormDialog;
 import br.com.bibliotec.ui.bookloan.BookLoanGrid;
+import br.com.bibliotec.ui.componets.PageTitleName;
 import br.com.bibliotec.ui.student.StudentFormDialog;
 import br.com.bibliotec.ui.student.StudentGrid;
 import com.vaadin.flow.component.UI;
@@ -38,12 +39,16 @@ public class HomePage extends VerticalLayout {
         this.bookController = bookController;
         this.bookLoanController = bookLoanController;
         this.studentController = studentController;
+        PageTitleName pageTitle = new PageTitleName("");
         
         
         createHeader();
         createCards();
         createFastActionsText();
         createFastActions();
+        
+        pageTitle.enableTitleContainer(false);
+        addComponentAsFirst(pageTitle);
     }
     
     private void createFastActionsText() {

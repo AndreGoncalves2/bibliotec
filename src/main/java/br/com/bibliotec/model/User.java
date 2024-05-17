@@ -1,7 +1,12 @@
 package br.com.bibliotec.model;
 
 import br.com.bibliotec.interfaces.HasId;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,7 +22,7 @@ public class User implements HasId<Long> {
 
     @NotBlank
     @Size(min = 3, max = 20, message = "O valor inserido deve ter entre 3 e 20 caracteres.")
-    @Column(name = "username", length = 20)
+    @Column(name = "username", length = 20, unique = true)
     private String username;
 
     @NotBlank(message = "Campo obrigatório")

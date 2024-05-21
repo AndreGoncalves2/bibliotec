@@ -6,8 +6,6 @@ import br.com.bibliotec.interfaces.RefreshListener;
 import br.com.bibliotec.model.BookLoan;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.TextField;
 
 public class ReturnBookDialog extends Dialog {
@@ -33,7 +31,7 @@ public class ReturnBookDialog extends Dialog {
                 refreshListener.refresh();
                 close();
             } catch (CodeIncorrectException e) {
-                Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                ErrorDialog.show("Ops!", e.getMessage());
                 e.printStackTrace();
             }
         });

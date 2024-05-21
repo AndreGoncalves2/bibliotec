@@ -6,14 +6,13 @@ import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
+import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.PageTitleName;
 import br.com.bibliotec.ui.helper.Binder;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -107,12 +106,10 @@ public class Register extends VerticalLayout {
                 controller.save(user);
                 UI.getCurrent().navigate("/login");
             } else {
-                Notification.show("Verifique os campos e tente novamente.").addThemeVariants(NotificationVariant.LUMO_WARNING);
+                throw new BibliotecException("Campos inválidos");
             }
-        } catch (BibliotecException e) {
-            throw new RuntimeException(e);
-        } catch (ValidationException e) {
-            Notification.show("Verifique os campos e tente novamente.").addThemeVariants(NotificationVariant.LUMO_WARNING);
+        } catch (ValidationException | BibliotecException e) {
+            ErrorDialog.show("Ops!", "Por favor, verifique os campos preenchidos e tente novamente.");
             e.printStackTrace();
         }
     }

@@ -9,8 +9,6 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.data.binder.ValidationException;
 
@@ -82,7 +80,7 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
             try {
                 handleSaveButton();
             } catch (ValidationException error) {
-                Notification.show("Erro ao salver item.").addThemeVariants(NotificationVariant.LUMO_ERROR);
+                ErrorDialog.show("Ops!", "Ocorreu um problema ao salvar o item. Por favor, tente novamente.");
                 error.printStackTrace();
             }
         });
@@ -108,7 +106,7 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
                 resetBinder();
                 close();
             } catch (BibliotecException e) {
-                Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_WARNING);
+                ErrorDialog.show("Ops!", e.getMessage());
                 e.printStackTrace();
             }
         }

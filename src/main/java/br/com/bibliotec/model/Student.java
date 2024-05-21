@@ -1,7 +1,12 @@
 package br.com.bibliotec.model;
 
 import br.com.bibliotec.interfaces.HasId;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -15,6 +20,7 @@ public class Student implements HasId<Long> {
     private Long id;
     
     @NotBlank
+    @Size(max = 10, min = 10, message = "Esse campo deve conter 10 caracteres")
     @Column(name = "ra", updatable = false)
     private String ra;
     

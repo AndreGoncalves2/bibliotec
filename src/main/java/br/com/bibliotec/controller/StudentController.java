@@ -22,7 +22,7 @@ public class StudentController extends GenericController<Student, Long, StudentR
     protected void validate(Student entity, Mode mode) throws DuplicateRaException {
         if(mode.equals(Mode.SAVE)) {
             if(existsByRa(entity.getRa())){
-                throw new DuplicateRaException("Ra já cadastrado");
+                throw new DuplicateRaException("RA já cadastrado. O aluno já está registrado no sistema.");
             }
         }
     }

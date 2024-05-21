@@ -36,16 +36,31 @@ vaadin-dialog-overlay > [slot="title"] {
     color: var(--black-color);
 }
 
+.error-dialog vaadin-button {
+    align-self: end;
+    font-weight: bold;
+    
+    color: white;
+    border: 1px solid var(--black-color);
+    background-color: var(--blue-color);
+    
 
+    transition: 0.3s;
+}
 
+.error-dialog vaadin-button:hover {
+    cursor: pointer;
+}
 
+.error-dialog vaadin-vertical-layout {
+    padding: 0;
+}
 
+.error-dialog h2 {
+    color: #DE241A;
+}
 
-
-
-
-
-
-
-
-
+.error-dialog p {
+    color: #000;
+    font-size: 1.2rem;
+}

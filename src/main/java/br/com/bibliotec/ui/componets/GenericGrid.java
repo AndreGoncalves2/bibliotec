@@ -10,8 +10,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,6 +18,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.RouteConfiguration;
 
 import java.util.List;
+import java.util.Optional;
 
 public class GenericGrid<T extends HasId<?>, C extends GenericController<T,?,?>> extends VerticalLayout implements RefreshListener {
     
@@ -85,11 +84,12 @@ public class GenericGrid<T extends HasId<?>, C extends GenericController<T,?,?>>
     }
 
     public T getSelectedItem() throws BibliotecException {
-        if (currentGrid.getSelectedItems().stream().findFirst().isEmpty()) {
-            Notification.show("Nenhum item selecionado").addThemeVariants(NotificationVariant.LUMO_WARNING);
+        Optional<T> selectedItem = currentGrid.getSelectedItems().stream().findFirst();
+        if (selectedItem.isEmpty()) {
+            ErrorDialog.show("Ops!", "Nenhum item foi selecionado. Por favor, selecione um item para continuar.");
             throw new BibliotecException("Nenhum item selecionado");
         }
-        return currentGrid.getSelectedItems().stream().findFirst().get();
+        return selectedItem.get();
     }
 
     private TextField createSearchField() {

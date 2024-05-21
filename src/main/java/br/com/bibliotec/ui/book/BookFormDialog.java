@@ -5,12 +5,11 @@ import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.componets.CustomUpload;
+import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.GenericFormDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
@@ -73,7 +72,7 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
                 getBinder().getValue().setImage(inputStream.readAllBytes());
                 renderImage();
             } catch (IOException error) {
-                Notification.show("Erro ao adicionar imagem.").addThemeVariants(NotificationVariant.LUMO_ERROR);
+                ErrorDialog.show("Ops!", "Ocorreu um problema ao adicionar a imagem. Por favor, tente novamente.");
                 error.printStackTrace();
             }
         });

@@ -12,8 +12,6 @@ import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.router.BeforeEvent;
@@ -128,7 +126,7 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
             deleteDialog.close();
             UI.getCurrent().navigate(defaultRoute);
         } catch (BibliotecException error){
-            Notification.show(error.getMessage()).addThemeVariants(NotificationVariant.LUMO_ERROR);
+            ErrorDialog.show("Ops!", error.getMessage());
             error.printStackTrace();
         }
     }
@@ -145,10 +143,11 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
 
                 UI.getCurrent().navigate(defaultRoute);
             } catch (BibliotecException e) {
-                Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_WARNING);
+                ErrorDialog.show("Ops!", e.getMessage());
                 e.printStackTrace();
             }
         } catch (ValidationException e) {
+            
             e.printStackTrace();
         }
     }

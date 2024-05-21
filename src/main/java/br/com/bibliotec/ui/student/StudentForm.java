@@ -29,7 +29,6 @@ public class StudentForm extends GenericForm<Student, StudentController, Long> {
         
         txtRa = new TextField("RA");
         txtRa.setAllowedCharPattern("[0-9]");
-        txtRa.setMinLength(10);
         txtRa.setMaxLength(10);
 
         txtName = new TextField("Nome");

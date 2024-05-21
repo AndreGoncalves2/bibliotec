@@ -7,11 +7,10 @@ import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
+import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.GenericForm;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -104,7 +103,7 @@ public class UserSettings extends GenericForm<User, UserController, Long> {
             try {
                 throw new BibliotecException("Por favor, confirme que a nova senha e sua confirmação coincidem.");
             } catch (BibliotecException e) {
-                Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                ErrorDialog.show("Ops!", e.getMessage());
                 return;
             }
         }
@@ -118,7 +117,7 @@ public class UserSettings extends GenericForm<User, UserController, Long> {
             try {
                 throw new BibliotecException("Senha atual incorreta.");
             } catch (BibliotecException e) {
-                Notification.show(e.getMessage()).addThemeVariants(NotificationVariant.LUMO_ERROR);
+                ErrorDialog.show("Ops!", e.getMessage());
                 e.printStackTrace();
             }
         }

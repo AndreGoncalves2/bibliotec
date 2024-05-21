@@ -4,14 +4,13 @@ import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
+import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.PageTitleName;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
@@ -93,13 +92,13 @@ public class LoginView extends VerticalLayout {
                         + "document.f.submit();");
                 UI.getCurrent().navigate("/home");
             } else {
-                Notification.show("Usuário ou senha incorreta.").addThemeVariants(NotificationVariant.LUMO_WARNING);
-                txtUser.clear();
-                txtPassword.clear();
+                throw new UsernameNotFoundException("Usuário ou senha incorreta.");
             }
         } catch (UsernameNotFoundException e) {
             e.printStackTrace();
-            Notification.show("Usuário ou senha incorreta.").addThemeVariants(NotificationVariant.LUMO_WARNING);
+            ErrorDialog.show("Ops!", "Parece que houve um erro com seu usuário ou senha. Por favor, confira e tente de novo.");
+            txtUser.clear();
+            txtPassword.clear();
         }
     }
 }

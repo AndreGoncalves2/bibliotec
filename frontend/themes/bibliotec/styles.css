@@ -1,9 +1,12 @@
-@import "../../../src/main/resources/META-INF/resources/components/header.css";
-@import "../../../src/main/resources/META-INF/resources/components/grid.css";
-@import "../../../src/main/resources/META-INF/resources/components/homePage.css";
-@import "../../../src/main/resources/META-INF/resources/components/login.css";
-@import "../../../src/main/resources/META-INF/resources/components/form.css";
-@import "../../../src/main/resources/META-INF/resources/components/settingsPage.css";
+@import "../../../src/main/resources/public/frontend/header.css";
+@import "../../../src/main/resources/public/frontend/grid.css";
+@import "../../../src/main/resources/public/frontend/homePage.css";
+@import "../../../src/main/resources/public/frontend/login.css";
+@import "../../../src/main/resources/public/frontend/form.css";
+@import "../../../src/main/resources/public/frontend/settingsPage.css";
+@import "../../../src/main/resources/public/frontend/pageTitle.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
     --lumo-tint-10pct: rgba(0, 0, 0, 0.1);
@@ -30,6 +33,7 @@
 
 body {
     background-color: var(--background-color);
+    font-family: "Montserrat", sans-serif;
 }
 
 vaadin-dialog-overlay > [slot="title"] {

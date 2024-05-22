@@ -9,6 +9,7 @@ import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.PageTitleName;
 import br.com.bibliotec.ui.helper.Binder;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -73,6 +74,7 @@ public class Register extends VerticalLayout {
         
         txtConfirmPassword.addBlurListener(event -> checkPasswordIsEqual());
         registerButton.addClickListener(click -> clickRegister());
+        registerButton.addClickShortcut(Key.ENTER);
         
         addClassName("default-form-layout");
         form.addClassName("form-layout");

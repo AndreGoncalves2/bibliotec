@@ -19,7 +19,7 @@ public class SecurityConfiguration
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher("/public/**"))
+        http.authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher("/**"))
                 .permitAll())
                 .userDetailsService(userService);
 

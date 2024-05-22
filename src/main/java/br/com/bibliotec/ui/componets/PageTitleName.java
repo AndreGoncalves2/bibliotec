@@ -1,14 +1,12 @@
 package br.com.bibliotec.ui.componets;
 
 
-import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-@StyleSheet("components/pageTitle.css")
 public class PageTitleName extends VerticalLayout {
 
     private final Div pageTitleContainer;

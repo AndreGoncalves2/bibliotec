@@ -98,6 +98,14 @@ public class UserSettings extends GenericForm<User, UserController, Long> {
     protected void handleSaveButton()  {
         SecurityService securityService = new SecurityService();
         User currentUser = userController.loadBYUsername(securityService.getAuthenticatedUser().getUsername());
+
+        if (txtNewPassword.getValue().isEmpty()) {
+            txtNewPassword.setInvalid(true);
+            ErrorDialog.show("Ops!", "A nova senha não pode ficar em branco");
+            return;
+        } else {
+            txtNewPassword.setInvalid(false);
+        }
         
         if (!checkPasswordIsEqual()) {
             try {

@@ -7,6 +7,7 @@ import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.PageTitleName;
 import com.vaadin.flow.component.Html;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
@@ -62,6 +63,8 @@ public class LoginView extends VerticalLayout {
         loginButton.addClassName("btn-login");
         
         loginButton.addClickListener(click -> handleClickLogin());
+        loginButton.addClickShortcut(Key.ENTER);
+        
         registerButton.addClickListener(click -> UI.getCurrent().navigate("/registrar"));
 
         form.addClassName("form-layout");

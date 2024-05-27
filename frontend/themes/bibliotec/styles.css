@@ -40,6 +40,10 @@ vaadin-dialog-overlay > [slot="title"] {
     color: var(--black-color);
 }
 
+vaadin-button:hover {
+    cursor: pointer;
+}
+
 .error-dialog vaadin-button {
     align-self: end;
     font-weight: bold;

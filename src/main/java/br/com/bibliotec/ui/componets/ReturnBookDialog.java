@@ -20,7 +20,7 @@ public class ReturnBookDialog extends Dialog {
         txtBookCode = new TextField("Código do livro");
         
         confirmButton = new Button("SALVAR");
-        cancelButton= new Button("Cancelar");
+        cancelButton= new Button("CANCELAR");
         
         confirmButton.addClassName("button-form-confirm");
         cancelButton.addClassName("button-form-delete");

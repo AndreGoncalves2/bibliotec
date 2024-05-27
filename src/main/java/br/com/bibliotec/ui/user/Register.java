@@ -18,16 +18,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @AnonymousAllowed
+@PageTitle("Registrar")
 @Route(value = "registrar", layout = MainView.class)
 public class Register extends VerticalLayout {
     
-    @Bind("username")
+    @Bind("name")
     private final TextField txtName;
     
     @Bind("email")
@@ -49,7 +51,7 @@ public class Register extends VerticalLayout {
         pageTitle.enableTitleContainer(false);
         
         H2 registerTitle = new H2("CRIE SUA CONTA");
-        Button registerButton = new Button("criar conta");
+        Button registerButton = new Button("Criar conta");
         VerticalLayout form = new VerticalLayout();
         VerticalLayout cardLayout = new VerticalLayout();
         
@@ -58,15 +60,18 @@ public class Register extends VerticalLayout {
         txtPassword = new PasswordField();
         txtConfirmPassword  = new PasswordField();
         
-        txtName.setPlaceholder("nome");
-        txtEmail.setPlaceholder("e-mail");
-        txtPassword.setPlaceholder("senha");
-        txtConfirmPassword.setPlaceholder("confirme sua senha");
+        txtName.setPlaceholder("Nome *");
+        txtEmail.setPlaceholder("E-mail *");
+        txtPassword.setPlaceholder("Senha *");
+        txtConfirmPassword.setPlaceholder("Confirme sua senha *");
 
         txtName.setPrefixComponent(LumoIcon.USER.create());
         txtEmail.setPrefixComponent(VaadinIcon.ENVELOPE.create());
         txtPassword.setPrefixComponent(VaadinIcon.LOCK.create());
         txtConfirmPassword.setPrefixComponent(VaadinIcon.LOCK.create());
+        
+        txtName.setRequiredIndicatorVisible(true);
+        txtName.setRequired(true);
         
         txtConfirmPassword.setRequiredIndicatorVisible(true);
         
@@ -79,16 +84,21 @@ public class Register extends VerticalLayout {
         addClassName("default-form-layout");
         form.addClassName("form-layout");
         cardLayout.addClassName("card-default-form");
+        
+        configurePasswordFields();
 
         form.add(txtName, txtEmail, txtPassword, txtConfirmPassword, registerButton);
         cardLayout.add(registerTitle, form);
         add(pageTitle,cardLayout);
     }
+    
+    private void configurePasswordFields() {
+        txtConfirmPassword.setErrorMessage("As senhas não conferem");
+    }
 
     private boolean checkPasswordIsEqual() {
         if (!txtPassword.getValue().equals(txtConfirmPassword.getValue())) {
             txtConfirmPassword.setInvalid(true);
-            txtConfirmPassword.setErrorMessage("As senhas não conferem");
             return false;
         } else {
             return true;
@@ -96,23 +106,25 @@ public class Register extends VerticalLayout {
     }
 
     private void clickRegister() {
+        User user= new User();
+
         try {
-            User user= new User();
-            
             binder.writeBean(user);
-
-            if (binder.isValid() && checkPasswordIsEqual()) {
-                String encodePassword = UserService.encodePassword(user.getPassword());
-                user.setPassword(encodePassword);
-
-                controller.save(user);
-                UI.getCurrent().navigate("/login");
-            } else {
-                throw new BibliotecException("Campos inválidos");
-            }
-        } catch (ValidationException | BibliotecException e) {
+        } catch (ValidationException e) {
             ErrorDialog.show("Ops!", "Por favor, verifique os campos preenchidos e tente novamente.");
             e.printStackTrace();
+        }
+        
+        if (binder.isValid() && checkPasswordIsEqual()) {
+            String encodePassword = UserService.encodePassword(user.getPassword());
+            user.setPassword(encodePassword);
+
+            try {
+                controller.save(user);
+                UI.getCurrent().navigate("/login");
+            } catch (BibliotecException e) {
+                ErrorDialog.show("Ops!", e.getMessage());
+            }
         }
     }
 }

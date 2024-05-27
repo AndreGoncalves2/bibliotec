@@ -1,7 +1,14 @@
 package br.com.bibliotec.model;
 
 import br.com.bibliotec.interfaces.HasId;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
@@ -16,7 +23,7 @@ public class BookLoan implements HasId<Long> {
     private Long id;
     
     @ManyToOne
-    @NotNull
+    @NotNull(message = "Selecione o livro.")
     @JoinColumn(name = "book")
     private Book book;
     
@@ -24,14 +31,14 @@ public class BookLoan implements HasId<Long> {
     @Column(name = "returned")
     private Boolean returned;
     
-    @NotNull
+    @NotNull(message = "Campo obrigatório")
     @Column(name = "booking_date")
     private LocalDate bookingDate;
     
     @Column(name = "due_date")
     private LocalDate dueDate;   
     
-    @NotNull
+    @NotNull(message = "Selecione o aluno.")
     @ManyToOne
     @JoinColumn(name = "student_ra")
     private Student student;

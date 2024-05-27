@@ -1,8 +1,13 @@
 package br.com.bibliotec.model;
 
 import br.com.bibliotec.interfaces.HasId;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 @Table
@@ -13,12 +18,12 @@ public class Book implements HasId<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    
-    @NotBlank
+
+    @NotEmpty(message = "Campo obrigatório")
     @Column(name = "code", updatable = false)
     private String code;
-    
-    @NotBlank
+
+    @NotEmpty(message = "Campo obrigatório")
     @Column(name = "title", length = 100)
     private String title;
     
@@ -28,8 +33,8 @@ public class Book implements HasId<Long> {
     @Column(name = "image", columnDefinition = "mediumblob")
     private byte[] image;
 
-    @Length(max = 1000)
-    @Column(name = "synopsis",length = 1000)
+    @Length(max = 1000, message = "Limite de 1000 caracteres excedido.")
+    @Column(name = "synopsis", length = 1000)
     private String synopsis;
 
     public Long getId() {

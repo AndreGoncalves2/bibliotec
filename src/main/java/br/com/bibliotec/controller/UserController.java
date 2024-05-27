@@ -1,6 +1,7 @@
 package br.com.bibliotec.controller;
 
 import br.com.bibliotec.controller.helper.GenericController;
+import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,19 @@ public class UserController extends GenericController<User, Long, UserRepository
         super();
         this.repository = repository;
     }
-
-    public User loadBYUsername(String username) {
-        return repository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    
+    public User loadByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
-   
+    @Override
+    protected void validate(User entity, Mode mode) throws BibliotecException {
+        if (mode.equals(Mode.SAVE) || mode.equals(Mode.UPDATE)) {
+            User user = repository.findByEmail(entity.getEmail()).orElse(null);
+            
+            if (user != null && ! entity.getId().equals(user.getId())) {
+                throw new BibliotecException("O endereço de email inserido já está em uso. Por favor, tente fazer login ou utilize outro email para se registrar.");
+            }
+        }
+    }
 }

@@ -1,9 +1,13 @@
 package br.com.bibliotec.ui.home;
 
+import br.com.bibliotec.authentication.SecurityService;
+import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
+import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.book.BookFormDialog;
 import br.com.bibliotec.ui.book.BookGrid;
@@ -20,25 +24,31 @@ import com.vaadin.flow.component.html.H5;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PermitAll
+@PageTitle("Início")
 @Route(value = "/home", layout = MainView.class)
 public class HomePage extends VerticalLayout {
     
     private final BookController bookController;
     private final BookLoanController bookLoanController;
     private final StudentController studentController;
+    private final UserController userController;
 
     public HomePage(@Autowired BookController bookController,
                     @Autowired BookLoanController bookLoanController,
-                    @Autowired StudentController studentController) throws BibliotecException {
+                    @Autowired StudentController studentController,
+                    @Autowired UserController userController) throws BibliotecException {
         this.bookController = bookController;
         this.bookLoanController = bookLoanController;
         this.studentController = studentController;
+        this.userController = userController;
+        
         PageTitleName pageTitle = new PageTitleName("");
         
         
@@ -85,10 +95,10 @@ public class HomePage extends VerticalLayout {
         Div actionBookIconDiv = new Div(LumoIcon.PLUS.create());
         Div actionStudentIconDiv = new Div(LumoIcon.PLUS.create());
         Div actionBookLoanIconDiv = new Div(LumoIcon.PLUS.create());
-        
-        actionBookIconDiv.addClickListener(click -> bookForm.open());
-        actionStudentIconDiv.addClickListener(click -> studentForm.open());
-        actionBookLoanIconDiv.addClickListener(click -> bookLoanForm.open());
+
+        actionBookDiv.addClickListener(click -> bookForm.open());
+        actionStudentDiv.addClickListener(click -> studentForm.open());
+        actionBookLoanDiv.addClickListener(click -> bookLoanForm.open());
         
         actionBookDiv.add(actionBook, actionBookIconDiv);
         actionStudentDiv.add(actionStudent, actionStudentIconDiv);
@@ -99,17 +109,34 @@ public class HomePage extends VerticalLayout {
     }
     
     private void createHeader() {
-        H5 welcomeMessage = new H5("[MENSAGEM DE BOAS-VINDAS E BREVE DESCRIÇÃO DA BIBLIOTECA]");
-        H4 message = new H4("CONFIRA O STATUS ATUAL DA BIBLIOTECA :");
-
         Div messageWrapper = new Div();
+        
+        H5 welcomeMessage = new H5("Bem-vindo, " + getUsername());
+        H4 message = new H4("CONFIRA O STATUS ATUAL DA BIBLIOTECA :");
         
         messageWrapper.addClassName("message-wrapper");
         messageWrapper.add(message);
         
         add(welcomeMessage, messageWrapper);
     }
-    
+
+    private String getUsername() {
+        UserService userService = new UserService(userController);
+        SecurityService securityService = new SecurityService();
+        
+        User userLogged = userService.getLoggedUser();
+        String username = "";
+        
+        if (userLogged == null) {
+            securityService.logout();
+            UI.getCurrent().navigate("/login");
+        } else{
+            username = userLogged.getName();
+        }
+        
+        return username;
+    }
+
     private void createCards() {
         UI currentUI = UI.getCurrent();
         

@@ -115,7 +115,7 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         cancelButton.addClickListener(click -> deleteDialog.close());
 
         deleteDialog.setHeaderTitle("Excluir item ?");
-        deleteDialog.add("Tem certeza que deja excluir ?");
+        deleteDialog.add("Tem certeza que deseja excluir ?");
 
         deleteDialog.getFooter().add(cancelButton, confirmDeleteButton);
     }
@@ -147,7 +147,6 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
                 e.printStackTrace();
             }
         } catch (ValidationException e) {
-            
             e.printStackTrace();
         }
     }
@@ -179,6 +178,8 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         } else {
             title = new PageTitleName("EDITAR " + titleParameter);
         }
+        
+        title.enablePageTitle(false);
         
         addComponentAsFirst(title);
     }

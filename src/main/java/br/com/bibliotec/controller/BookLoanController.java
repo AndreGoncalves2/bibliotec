@@ -2,6 +2,7 @@ package br.com.bibliotec.controller;
 
 import br.com.bibliotec.controller.helper.GenericController;
 import br.com.bibliotec.exception.CodeIncorrectException;
+import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.repository.BookLoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class BookLoanController extends GenericController<BookLoan, Long, BookLo
         } else {
             throw new CodeIncorrectException("O código informado não corresponde ao livro do empréstimo selecionado.");
         }
+    }
+    
+    public boolean verifyBookIsBorrowed(Book book) {
+        return repository.existsByBookAndReturned(book, true);
     }
     
     @Override

@@ -5,11 +5,13 @@ import br.com.bibliotec.model.Student;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.GenericGrid;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PermitAll
+@PageTitle("Alunos")
 @Route(value = "/aluno", layout = MainView.class)
 public class StudentGrid extends GenericGrid<Student, StudentController> {
 

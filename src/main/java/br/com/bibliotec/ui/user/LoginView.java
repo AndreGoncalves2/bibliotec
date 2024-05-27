@@ -34,17 +34,13 @@ public class LoginView extends VerticalLayout {
     
 
     public LoginView(@Autowired UserController controller) {
-
-        addClassName("default-form-layout");
-
         this.controller = controller;
-        
-        
+
         setSizeFull();
 
         H2 loginTitle = new H2("FAÇA LOGIN");
-        Button loginButton = new Button("entrar");
-        Button registerButton = new Button("criar conta");
+        Button loginButton = new Button("Entrar");
+        Button registerButton = new Button("Criar conta");
         PageTitleName pageTitleName = new PageTitleName("");
 
         VerticalLayout form = new VerticalLayout();
@@ -57,7 +53,7 @@ public class LoginView extends VerticalLayout {
         txtPassword.setPrefixComponent(VaadinIcon.LOCK.create());
         pageTitleName.enableTitleContainer(false);
         
-        txtUser.setPlaceholder("Usuário");
+        txtUser.setPlaceholder("E-mail");
         txtPassword.setPlaceholder("Senha");
         
         loginButton.addClassName("btn-login");
@@ -67,11 +63,11 @@ public class LoginView extends VerticalLayout {
         
         registerButton.addClickListener(click -> UI.getCurrent().navigate("/registrar"));
 
+        addClassName("default-form-layout");
         form.addClassName("form-layout");
-        form.add(txtUser, txtPassword, loginButton, registerButton);
-
         cardLayout.addClassName("card-default-form");
-
+        
+        form.add(txtUser, txtPassword, loginButton, registerButton);
         cardLayout.add(loginTitle, form);
         add(pageTitleName, cardLayout);
 
@@ -87,10 +83,10 @@ public class LoginView extends VerticalLayout {
     private void handleClickLogin() {
 
         try {
-            User user = controller.loadBYUsername(txtUser.getValue());
+            User user = controller.loadByEmail(txtUser.getValue());
 
             if (UserService.matches(txtPassword.getValue(), user.getPassword())) {
-                UI.getCurrent().getPage().executeJs("document.getElementById(\"username\").value = \""+user.getUsername()+"\"; "
+                UI.getCurrent().getPage().executeJs("document.getElementById(\"username\").value = \""+user.getEmail()+"\"; "
                         + "document.getElementById(\"password\").value = \""+user.getPassword()+"\"; "
                         + "document.f.submit();");
                 UI.getCurrent().navigate("/home");

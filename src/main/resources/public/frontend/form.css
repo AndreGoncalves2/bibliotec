@@ -118,3 +118,7 @@ vaadin-button.return-button vaadin-icon {
     height: 1.8rem;
 }
 
+vaadin-text-area {
+    overflow: auto;
+    max-height: 8rem;
+}

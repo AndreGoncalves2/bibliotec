@@ -14,16 +14,18 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoIcon;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @PermitAll
+@PageTitle("Usuário")
 @Route(value = "configuracoes", layout = MainView.class)
 public class UserSettings extends GenericForm<User, UserController, Long> {
     
-    @Bind("username")
+    @Bind("name")
     private final TextField txtUserame;
 
     @Bind("email")
@@ -47,18 +49,21 @@ public class UserSettings extends GenericForm<User, UserController, Long> {
         VerticalLayout cardLayout = new VerticalLayout();
         VerticalLayout formContent = new VerticalLayout();
         
-        H2 settingsAccount = new H2("EDITAR INFORMAÇÕES");
+        H2 settingsAccount = new H2("EDITAR DADOS");
         txtUserame = new TextField();
         txtEmail = new TextField();
         txtNewPassword = new PasswordField();
         txtConfirmNewPassword = new PasswordField();
         txtOldPassword = new PasswordField();
 
-        txtUserame.setPlaceholder("nome");
-        txtEmail.setPlaceholder("e-mail");
-        txtNewPassword.setPlaceholder("nova senha");
-        txtConfirmNewPassword.setPlaceholder("confirme sua nova senha");
-        txtOldPassword.setPlaceholder("Senha atual");
+        txtUserame.setPlaceholder("Nome *");
+        txtEmail.setPlaceholder("E-mail *");
+        txtNewPassword.setPlaceholder("Nova senha *");
+        txtConfirmNewPassword.setPlaceholder("Confirme sua nova *");
+        txtOldPassword.setPlaceholder("Senha atual *");
+        
+        txtNewPassword.setPattern("^(?=.*[0-9])(?=.*[a-zA-Z]).{8}.*$");
+        txtNewPassword.setErrorMessage("Senha deve ter no mínimo 8 caracteres, incluindo uma letra e um dígito.");
 
         txtUserame.setPrefixComponent(LumoIcon.USER.create());
         txtEmail.setPrefixComponent(VaadinIcon.ENVELOPE.create());
@@ -70,9 +75,9 @@ public class UserSettings extends GenericForm<User, UserController, Long> {
         txtConfirmNewPassword.setRequiredIndicatorVisible(true);
         
         cardLayout.addClassName("card-default-form");
+        cardLayout.addClassName("settings-form");
         formContent.addClassName("form-layout");
-
-        txtUserame.setReadOnly(true);
+        
         txtConfirmNewPassword.addBlurListener(event -> checkPasswordIsEqual());
         
         cardLayout.add(settingsAccount);
@@ -97,24 +102,14 @@ public class UserSettings extends GenericForm<User, UserController, Long> {
     @Override
     protected void handleSaveButton()  {
         SecurityService securityService = new SecurityService();
-        User currentUser = userController.loadBYUsername(securityService.getAuthenticatedUser().getUsername());
+        User currentUser = userController.loadByEmail(securityService.getAuthenticatedUser().getUsername());
 
         if (txtNewPassword.getValue().isEmpty()) {
             txtNewPassword.setInvalid(true);
-            ErrorDialog.show("Ops!", "A nova senha não pode ficar em branco");
             return;
-        } else {
-            txtNewPassword.setInvalid(false);
         }
         
-        if (!checkPasswordIsEqual()) {
-            try {
-                throw new BibliotecException("Por favor, confirme que a nova senha e sua confirmação coincidem.");
-            } catch (BibliotecException e) {
-                ErrorDialog.show("Ops!", e.getMessage());
-                return;
-            }
-        }
+        if (!checkPasswordIsEqual()) return;
         
         if (UserService.matches(txtOldPassword.getValue(), currentUser.getPassword())) {
             String encodePassword = UserService.encodePassword(txtNewPassword.getValue());

@@ -1,5 +1,6 @@
 package br.com.bibliotec.ui;
 
+import br.com.bibliotec.authentication.SecurityService;
 import br.com.bibliotec.ui.book.BookGrid;
 import br.com.bibliotec.ui.bookloan.BookLoanGrid;
 import br.com.bibliotec.ui.home.HomePage;
@@ -30,6 +31,7 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
     private Div startDiv;
     
     public MainView() {
+        
         VerticalLayout container = new VerticalLayout();
         container.setClassName("header-container");
         
@@ -47,7 +49,10 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
     }
     
     private HorizontalLayout createHeader() {
+        SecurityService securityService = new SecurityService();
+        
         HorizontalLayout layout = new HorizontalLayout();
+        HorizontalLayout endDiv = new HorizontalLayout();
         layout.addClassName("buttons-container");
         
         startDiv = new Div();
@@ -55,12 +60,12 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         studentDiv = new Div();
         loanDiv = new Div();
         configDiv = new Div();
-
-        startDiv.setClassName("div-links-start");
-        bookDiv.setClassName("div-links-right");
-        studentDiv.setClassName("div-links-right");
-        loanDiv.setClassName("div-links-right");
-        configDiv.setClassName("div-link-config");
+        
+        startDiv.addClassName("div-links-start");
+        bookDiv.addClassName("div-links-right");
+        studentDiv.addClassName("div-links-right");
+        loanDiv.addClassName("div-links-right");
+        configDiv.addClassName("div-link-config");
         
         RouterLink startLink = new RouterLink("INÍCIO", HomePage.class);
         RouterLink bookLink = new RouterLink("LIVROS", BookGrid.class);
@@ -74,7 +79,6 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         loanDiv.add(loanLink);
         configDiv.add(configLink);
         
-        HorizontalLayout endDiv = new HorizontalLayout();
         endDiv.setClassName("div-links-container-end");
 
         endDiv.add(bookDiv);
@@ -83,11 +87,21 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
         endDiv.add(configDiv);
 
         layout.add(startDiv, endDiv);
+
+        boolean loggedUser = securityService.getAuthenticatedUser() == null;
+        if (loggedUser) disableButtons();
         
         return layout;
     }
-    
-   
+
+    private void disableButtons() {
+        startDiv.addClassName("disabled");
+        bookDiv.addClassName("disabled");
+        studentDiv.addClassName("disabled");
+        loanDiv.addClassName("disabled");
+        configDiv.addClassName("disabled");
+    }
+
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {

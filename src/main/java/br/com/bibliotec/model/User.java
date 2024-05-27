@@ -8,7 +8,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -18,24 +19,26 @@ public class User implements HasId<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Long id = 0L;
 
-    @NotBlank
+    @NotEmpty(message = "Campo obrigatório")
     @Size(min = 3, max = 20, message = "O valor inserido deve ter entre 3 e 20 caracteres.")
-    @Column(name = "username", length = 20, unique = true)
-    private String username;
-
-    @NotBlank(message = "Campo obrigatório")
+    @Column(name = "name", length = 20)
+    private String name;
+    
+    @NotEmpty(message = "Campo obrigatório")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-zA-Z]).{8}.*$",
+            message = "Senha deve ter no mínimo 8 caracteres, incluindo uma letra e um dígito.")
     @Column(name = "password")
     private String password;
 
-    @NotBlank(message = "Campo obrigatório")
+    @NotEmpty(message = "Campo obrigatório")
     @Email(message = "Email inválido")
     @Column(name = "email", length = 60, unique = true)
     private String email;
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public User() {}
@@ -48,8 +51,8 @@ public class User implements HasId<Long> {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

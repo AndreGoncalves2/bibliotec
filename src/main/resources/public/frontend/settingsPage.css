@@ -6,8 +6,8 @@
     padding-block: 1.5rem;
 }
 
-.card-default-form {
-    padding-top: .5rem;
+.card-default-form.settings-form {
+    padding-top: 0;
     margin: 0;
     border: none;
     width: 100%;

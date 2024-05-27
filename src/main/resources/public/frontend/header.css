@@ -31,7 +31,6 @@
     color: var(--text-black-color);
     text-align: center;
     width: 100%;
-    text-shadow: 1px 4px 4px rgba(0,0,0,0.3);
 }
 
 .div-links-start {
@@ -56,6 +55,18 @@
     border-left: 1px solid var(--black-color);
     background-color: white;
 }
+
+.disabled {
+    background-color: #f5f5f5;
+    color: #a0a0a0;
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.disabled a:hover {
+    cursor: not-allowed;
+}
+
 
 .div-link-config {
     border-bottom-right-radius: 15px;

@@ -27,7 +27,7 @@ vaadin-text-field vaadin-icon {
 
 vaadin-grid {
     border: 1px solid var(--text-black-color);
-    box-shadow: 4px 4px 3px 1px var(--box-shadown);
+    box-shadow: 2px 2px 7px .6px var(--box-shadown);
 }
 
 vaadin-grid::part(header-cell) {
@@ -35,5 +35,5 @@ vaadin-grid::part(header-cell) {
 }
 
 vaadin-grid.grid::part(late) {
-    background-color: rgba(255, 0, 0, 0.5);
+    background-color: rgba(255, 0, 0, 0.2);
 }

@@ -1,5 +1,6 @@
 package br.com.bibliotec.repository;
 
+import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.BookLoan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,4 +16,6 @@ public interface BookLoanRepository extends JpaRepository<BookLoan, Long> {
     @Transactional
     @Query("UPDATE book_loan bk SET bk.returned = :returned WHERE bk.id = :id")
     void updateReturned(@Param("id") Long id, @Param("returned") boolean returned);
+
+    boolean existsByBookAndReturned(Book book, Boolean returned);
 }

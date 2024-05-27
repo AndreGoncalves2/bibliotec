@@ -11,6 +11,7 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @PermitAll
+@PageTitle("Empréstimos")
 @Route(value = "/emprestimo", layout = MainView.class)
 public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
     
@@ -61,7 +63,7 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         grid.addColumn(bookLoan -> bookLoan.getStudent().getName()).setHeader("Aluno").setFlexGrow(3).setSortable(true);
         grid.addColumn(bookLoan -> bookLoan.getStudent().getStudentClass()).setHeader("Turma").setFlexGrow(1).setSortable(true);
         grid.addColumn(bookLoan -> formatter.format(bookLoan.getBookingDate())).setHeader("Data Reserva").setFlexGrow(1).setSortable(true);
-        grid.addColumn(bookLoan -> formatter.format(bookLoan.getDueDate())).setHeader("Data Vencimento").setFlexGrow(1).setSortable(true);
+        grid.addColumn(bookLoan -> bookLoan.getDueDate() != null ?  formatter.format(bookLoan.getDueDate()) : "").setHeader("Data Vencimento").setFlexGrow(1).setSortable(true);
         grid.addComponentColumn(bookLoan -> createStatusIcon(bookLoan.getReturned())).setTextAlign(ColumnTextAlign.CENTER).setHeader("Devolvido").setWidth("1rem").setComparator(BookLoan::getReturned);
         grid.addComponentColumn(bookLoan -> lateInstallment(bookLoan) ? createStatusIcon(true) : createStatusIcon(false))
                 .setTextAlign(ColumnTextAlign.CENTER).setHeader("Atrasado").setComparator(BookLoanGrid::lateInstallment);
@@ -76,7 +78,11 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
     }
 
     private static boolean lateInstallment(BookLoan bookLoan) {
-        return LocalDate.now().isAfter(bookLoan.getDueDate()) && !bookLoan.getReturned();
+        if (bookLoan.getDueDate() != null) {
+            return LocalDate.now().isAfter(bookLoan.getDueDate()) && !bookLoan.getReturned();
+        } else {
+            return false;
+        }
     }
 
     private Icon createStatusIcon(Boolean returned) {
@@ -84,12 +90,12 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         if (returned) {
             icon = VaadinIcon.CHECK.create();
             icon.getElement().getThemeList().add("badge success");
+            icon.setTooltipText("Sim");
         } else {
             icon = VaadinIcon.CLOSE_SMALL.create();
             icon.getElement().getThemeList().add("badge error");
+            icon.setTooltipText("Não");
         }
         return icon;
     }
-    
-//    mexer no dialog de devolucao, dps na logica de novo emprestimo com livo atrasado. Pagina de login
 }

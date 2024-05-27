@@ -5,8 +5,10 @@ H4{
     color: var(--text-home-black-color);
 }
 
+
+
 .message-wrapper {
-    margin: 2.5rem;
+    margin: 1.3rem 2.5rem 2.5rem 2.5rem;
     margin-inline: auto;
     display: flex;
     justify-content: center;
@@ -42,7 +44,7 @@ H4{
 
     background-color: white;
     border: 1px solid var(--black-color);
-    box-shadow: 4px 4px 3px 1px var(--box-shadown);
+    box-shadow: 2px 2px 7px .1px var(--box-shadown);
 }
 
 .home-cards h4 {
@@ -61,6 +63,14 @@ H4{
     background-color: var(--background-color);
     border-radius: .5rem;
     border: 1px solid var(--black-color);
+
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.home-cards:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
 }
 
 .home-cards div vaadin-icon {
@@ -114,6 +124,15 @@ H4{
     border-radius: .3rem;
     border: 1px solid var(--black-color);
     background-color: white;
+   }
+.fast-action {
+    transition: transform 0.2s, box-shadow 0.2s;    
+}
+
+.fast-action:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .fast-actions-layout .fast-action div vaadin-icon {

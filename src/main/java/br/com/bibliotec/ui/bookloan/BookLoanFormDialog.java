@@ -8,9 +8,9 @@ import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.model.Student;
+import br.com.bibliotec.ui.componets.DatePickerPT;
 import br.com.bibliotec.ui.componets.GenericFormDialog;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -21,10 +21,10 @@ public class BookLoanFormDialog extends GenericFormDialog<BookLoan, BookLoanCont
     private final ComboBox<Book> bookComboBox;
     
     @Bind("bookingDate")
-    private final DatePicker bookingDate;
+    private final DatePickerPT bookingDate;
 
     @Bind("dueDate")
-    private final DatePicker dueDate;
+    private final DatePickerPT dueDate;
 
     @Bind("student")
     private final ComboBox<Student> studentComboBox;
@@ -40,8 +40,8 @@ public class BookLoanFormDialog extends GenericFormDialog<BookLoan, BookLoanCont
         bookComboBox.setItemLabelGenerator(Book::getTitle);
         bookComboBox.setItems(bookController.list());
         
-        bookingDate = new DatePicker("Data do empréstimo");
-        dueDate = new DatePicker("Data do vencimento");
+        bookingDate = new DatePickerPT("Data do empréstimo");
+        dueDate = new DatePickerPT("Data do vencimento");
         
         bookingDate.setValue(LocalDate.now());
         bookingDate.addValueChangeListener(event -> dueDate.setMin(event.getValue()));
@@ -52,7 +52,7 @@ public class BookLoanFormDialog extends GenericFormDialog<BookLoan, BookLoanCont
 
         createBinder();
 
-        getFormLayout().add(bookComboBox, bookingDate, dueDate, studentComboBox);
+        getFormLayout().add(studentComboBox, bookComboBox, bookingDate, dueDate);
     }
     
 }

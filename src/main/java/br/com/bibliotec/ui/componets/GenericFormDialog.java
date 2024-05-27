@@ -76,14 +76,7 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
         
         cancelButton.addClickListener(click -> close());
         exitButton.addClickListener(click -> close());
-        saveButton.addClickListener(click -> {
-            try {
-                handleSaveButton();
-            } catch (ValidationException error) {
-                ErrorDialog.show("Ops!", "Ocorreu um problema ao salvar o item. Por favor, tente novamente.");
-                error.printStackTrace();
-            }
-        });
+        saveButton.addClickListener(click -> handleSaveButton());
 
         exitButton.addClassName("close-button");
         
@@ -92,8 +85,12 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
         getFooter().add(displayButtons);
     }
 
-    public void handleSaveButton() throws ValidationException {
-        binder.writeBean(currentEntity);
+    public void handleSaveButton() {
+        try {
+            binder.writeBean(currentEntity);
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
 
         if (binder.isValid()) {
             try {
@@ -124,5 +121,9 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new BibliotecException(e.getMessage());
         }
+    }
+    
+    public void setTitle(String title) {
+        setHeaderTitle(title);
     }
 }

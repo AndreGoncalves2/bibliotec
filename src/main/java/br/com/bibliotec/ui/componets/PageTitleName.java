@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 public class PageTitleName extends VerticalLayout {
 
     private final Div pageTitleContainer;
+    private HorizontalLayout headerTitle;
 
     public PageTitleName(String title) {
         setAlignItems(Alignment.CENTER);
@@ -18,8 +19,8 @@ public class PageTitleName extends VerticalLayout {
 
         pageTitleContainer.add(pageTitle);
         pageTitleContainer.addClassName("div-page-title");
-        
-        HorizontalLayout headerTitle = createPageTitle();
+
+        headerTitle = createPageTitle();
         add(headerTitle, pageTitleContainer);
     }
 
@@ -39,5 +40,9 @@ public class PageTitleName extends VerticalLayout {
     
     public void enableTitleContainer(Boolean enableTitleContainer) {
         pageTitleContainer.setVisible(enableTitleContainer);
+    }
+    
+    public void enablePageTitle(Boolean enablePageTitle) {
+        headerTitle.setVisible(enablePageTitle);
     }
 }

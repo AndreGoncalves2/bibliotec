@@ -9,6 +9,7 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import jakarta.annotation.security.PermitAll;
@@ -20,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 @PermitAll
+@PageTitle("Livros")
 @Route(value = "/livro", layout = MainView.class)
 public class BookGrid extends GenericGrid<Book, BookController> {
 
@@ -56,7 +58,7 @@ public class BookGrid extends GenericGrid<Book, BookController> {
                 return image;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+           e.printStackTrace();
         }
         return createEmptyImage();
     }

@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 @Table
@@ -18,18 +18,18 @@ public class Student implements HasId<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    
-    @NotBlank
-    @Size(max = 10, min = 10, message = "Esse campo deve conter 10 caracteres")
+
+    @NotEmpty(message = "Campo obrigatório")
+    @Size(max = 10, min = 10, message = "O RA deve conter 10 caracteres.")
     @Column(name = "ra", updatable = false)
     private String ra;
-    
-    @NotBlank
-    @Size(min = 10, message = "O nome deve ter no mínimo 10 caracteres.")
+
+    @NotEmpty(message = "Campo obrigatório")
+    @Size(min = 5, message = "O nome deve ter no mínimo 5 caracteres.")
     @Column(name = "name", length = 60)
     private String name;
 
-    @NotBlank
+    @NotEmpty(message = "Campo obrigatório")
     @Column(name = "student_class", length = 60)
     private String studentClass;
 
@@ -63,14 +63,5 @@ public class Student implements HasId<Long> {
 
     public void setStudentClass(String studentClass) {
         this.studentClass = studentClass;
-    }
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "ra=" + ra +
-                ", name='" + name + '\'' +
-                ", studentClass='" + studentClass + '\'' +
-                '}';
     }
 }

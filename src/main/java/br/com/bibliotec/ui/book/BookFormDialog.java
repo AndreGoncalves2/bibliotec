@@ -1,6 +1,7 @@
 package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.anotation.Bind;
+import br.com.bibliotec.config.GlobalProperties;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.Book;
@@ -111,7 +112,7 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
     protected void beforeSave(){
         if (upload.getFileContentStream() != null) {
             try {
-                File directory = new File("./src/main/resources/public/images");
+                File directory = GlobalProperties.getDirectory();
                 String extension = FilenameUtils.getExtension(upload.getFileName());
                 String newFileName = UUID.randomUUID() + "." + extension;
                 File outputFile = new File(directory + File.separator + newFileName);

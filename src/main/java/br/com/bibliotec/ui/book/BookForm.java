@@ -1,6 +1,7 @@
 package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.anotation.Bind;
+import br.com.bibliotec.config.GlobalProperties;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.MainView;
@@ -9,7 +10,6 @@ import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.GenericForm;
 import br.com.bibliotec.ui.componets.UploadPT;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,13 +17,15 @@ import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
 import jakarta.annotation.security.PermitAll;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.File;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @PermitAll
 @PageTitle("Livro")
@@ -43,7 +45,7 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
     private final TextArea txtSynopsis;
 
     private CustomUpload upload;
-    
+
     public BookForm(@Autowired BookController controller) {
         super(controller, Book.class);
         
@@ -69,7 +71,7 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
         UploadPT i18n = new UploadPT();
         int maxFileSizeInBytes = 1024 * 1024;
 
-        Span label = new Span("Adicione a imagem do livro.");
+        Span label = new Span("Adicione uma imagem.");
         label.getStyle().set("vertical-align", "bottom");
         upload.setDropLabel(label);
 
@@ -83,38 +85,50 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
         upload.addFileRejectedListener(event -> {
             ErrorDialog.show("Ops!", "A imagem que você está tentando carregar é muito grande. Por favor, selecione uma imagem com tamanho menor que 1MB.");
         });
+        
     }
 
     private void insertImage(SucceededEvent event, MultiFileMemoryBuffer buffer) {
         String fileName = event.getFileName();
         InputStream inputStream = buffer.getInputStream(fileName);
-        try {
-            getBinder().getValue().setImage(inputStream.readAllBytes());
-            renderImage();
-        } catch (IOException error) {
-            ErrorDialog.show("Ops!", "Ocorreu um problema ao adicionar a imagem. Por favor, tente novamente.");
-            error.printStackTrace();
-        }
+//        renderImage();
     }
 
-    private void renderImage() {
-        byte[] bytes = getBinder().getValue().getImage();
-
-        StreamResource resource = new StreamResource(
-                "image.png",
-                () -> new ByteArrayInputStream(bytes)
-        );
-        Image image = new Image(resource, "Imagem");
-        image.setMaxWidth("5rem");
-        image.setMaxHeight("5rem");
-        image.getStyle().set("border-radius", ".3rem");
-        
-        image.getStyle().set("vertical-align", "bottom");
-        upload.setDropLabel(image);
-    }
+//    private void renderImage() {
+//        byte[] bytes = getBinder().getValue().getImage();
+//
+//        StreamResource resource = new StreamResource(
+//                "image.png",
+//                () -> new ByteArrayInputStream(bytes)
+//        );
+//        Image image = new Image(resource, "Imagem");
+//        image.setMaxWidth("5rem");
+//        image.setMaxHeight("5rem");
+//        image.getStyle().set("border-radius", ".3rem");
+//        
+//        image.getStyle().set("vertical-align", "bottom");
+//        upload.setDropLabel(image);
+//    }
     
     private void removeImage() {
-        upload.setDropLabel(new Span("Adicione a imagem do livro."));
-        getBinder().getValue().setImage(null);
+        upload.setDropLabel(new Span("Adicione uma imagem."));
+        getBinder().getValue().setStringImage(null);
     }
+    
+    @Override
+    protected void beforeSave(){
+        if (upload.getFileContentStream() != null) {
+            try {
+                File directory = GlobalProperties.getDirectory();
+                String extension = FilenameUtils.getExtension(upload.getFileName());
+                String newFileName = UUID.randomUUID() + "." + extension;
+                File outputFile = new File(directory + File.separator + newFileName);
+                Files.copy(upload.getFileContentStream(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                
+                getBinder().getValue().setStringImage(newFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 }

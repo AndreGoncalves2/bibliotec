@@ -24,7 +24,7 @@ public class BookLoanController extends GenericController<BookLoan, Long, BookLo
     }
     
     public boolean verifyBookIsBorrowed(Book book) {
-        return repository.existsByBookAndReturned(book, true);
+        return repository.existsByBookAndReturned(book, false);
     }
     
     @Override

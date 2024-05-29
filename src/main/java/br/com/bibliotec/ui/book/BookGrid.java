@@ -1,8 +1,10 @@
 package br.com.bibliotec.ui.book;
 
+import br.com.bibliotec.config.GlobalProperties;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.ui.MainView;
+import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.GenericGrid;
 import com.vaadin.flow.component.HtmlContainer;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -15,10 +17,9 @@ import com.vaadin.flow.server.StreamResource;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 @PermitAll
 @PageTitle("Livros")
@@ -43,24 +44,36 @@ public class BookGrid extends GenericGrid<Book, BookController> {
     }
 
     private static HtmlContainer imageRender(Book book) {
+        String newFileName = book.getStringImage();
+        File file = new File(GlobalProperties.getFileDirectory()+ newFileName);
         try {
-            BufferedImage imageCheck = null;
-            if (book.getImage() != null) {
-                imageCheck = ImageIO.read(new ByteArrayInputStream(book.getImage()));
+            if (file.exists() && !file.isDirectory()) {
+                return constructImage(newFileName, file);
+            } else {
+                return createEmptyImage();
             }
-
-            if (imageCheck != null) {
-                StreamResource resource = new StreamResource(book.getTitle(), () -> new ByteArrayInputStream(book.getImage()));
-                Image image = new Image(resource, "Book image");
-                image.setWidth("30px");
-                image.setHeight("45px");
-
-                return image;
-            }
-        } catch (IOException e) {
-           e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ErrorDialog.show("Ops!", " Erro ao carregar imagem.");
+            return createEmptyImage();
         }
-        return createEmptyImage();
+    }
+
+    private static Image constructImage(String newFileName, File file) {
+        StreamResource resource = new StreamResource(
+                newFileName,
+                () -> {
+                    try {
+                        return new FileInputStream(file);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                });
+        Image image = new Image(resource, "alt text");
+        image.setWidth("30px");
+        image.setHeight("45px");
+        return image;
     }
 
     private static Div createEmptyImage() {

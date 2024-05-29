@@ -15,6 +15,7 @@ import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.AppShellSettings;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 
@@ -29,6 +30,12 @@ public class MainView extends AppLayout implements AppShellConfigurator, BeforeE
     private Div loanDiv;
     private Div configDiv;
     private Div startDiv;
+
+    @Override
+    public void configurePage(AppShellSettings settings) {
+        settings.addLink("shortcut icon", "icons/favicon.png");
+        settings.addFavIcon("icon", "icons/favicon.png", "512x512");
+    }
     
     public MainView() {
         

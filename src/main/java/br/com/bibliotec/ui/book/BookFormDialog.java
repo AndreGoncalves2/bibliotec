@@ -16,11 +16,16 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.server.StreamResource;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 public class BookFormDialog extends GenericFormDialog<Book, BookController, Long> {
     
@@ -58,21 +63,27 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
     }
 
     private void createImageInput() {
-        buffer = new MultiFileMemoryBuffer();
+        MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
         upload = new CustomUpload(buffer);
         UploadPT i18n = new UploadPT();
+        int maxFileSizeInBytes = 1024 * 1024;
+
+        Span label = new Span("Adicione a imagem do livro.");
+        label.getStyle().set("vertical-align", "bottom");
+        upload.setDropLabel(label);
 
         upload.setI18n(i18n);
         upload.setUploadButton(new Button("Adicionar imagem"));
         upload.setAcceptedFileTypes(".png", ".jpg", ".jpeg");
-        upload.setDropLabel(new Span("Adicione a imagem"));
         upload.setMaxFiles(1);
         upload.addFileRemoveListener(this::removeImage);
-        
         upload.addSucceededListener(event -> insertImage(event, buffer));
-        upload.addFailedListener(event -> System.out.println("Failed to insert"));
-        upload.addFileRejectedListener(event -> System.out.println("reject to insert"));
+        upload.setMaxFileSize(maxFileSizeInBytes);
+        upload.addFileRejectedListener(event -> {
+            ErrorDialog.show("Ops!", "A imagem que você está tentando carregar é muito grande. Por favor, selecione uma imagem com tamanho menor que 1MB.");
+        });
     }
+    
     private void insertImage(SucceededEvent event, MultiFileMemoryBuffer buffer) {
         String fileName = event.getFileName();
         InputStream inputStream = buffer.getInputStream(fileName);
@@ -105,4 +116,21 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
         upload.setDropLabel(new Span("Adicione a imagem do livro."));
         getBinder().getValue().setImage(null);
     }
+
+    @Override
+    protected void beforeSave(){
+        if (upload.getFileContentStream() != null) {
+            try {
+                File directory = new File("./src/main/resources/public/images");
+                String extension = FilenameUtils.getExtension(upload.getFileName());
+                String newFileName = UUID.randomUUID() + "." + extension;
+                File outputFile = new File(directory + File.separator + newFileName);
+                Files.copy(upload.getFileContentStream(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                getBinder().getValue().setStringImage(newFileName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
 }

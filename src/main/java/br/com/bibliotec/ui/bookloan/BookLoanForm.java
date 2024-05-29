@@ -51,7 +51,9 @@ public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Lon
         bookComboBox.setItemLabelGenerator(book -> book.getCode() + " - " + book.getTitle());
         bookComboBox.setRenderer(createRenderer());
         bookComboBox.setItems(bookController.list());
-        bookComboBox.addValueChangeListener(event -> checkBookIsBorrowed(event.getValue()));
+        bookComboBox.addValueChangeListener(event -> {
+            if (event.isFromClient()) checkBookIsBorrowed(event.getValue());
+        });
 
         bookingDate = new DatePickerPT("Data do empréstimo");
         dueDate = new DatePickerPT("Data do vencimento");

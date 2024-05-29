@@ -29,13 +29,13 @@ public class Book implements HasId<Long> {
     
     @Column(name = "author", length = 60)
     private String author;
-    
-    @Column(name = "image", columnDefinition = "mediumblob")
-    private byte[] image;
 
     @Length(max = 1000, message = "Limite de 1000 caracteres excedido.")
     @Column(name = "synopsis", length = 1000)
     private String synopsis;
+    
+    @Column(name = "string_image")
+    private String stringImage;
 
     public Long getId() {
         return id;
@@ -68,14 +68,6 @@ public class Book implements HasId<Long> {
     public void setAuthor(String author) {
         this.author = author;
     }
-    
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] imagem) {
-        this.image = imagem;
-    }
 
     public String getSynopsis() {
         return synopsis;
@@ -83,6 +75,14 @@ public class Book implements HasId<Long> {
 
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
+    }
+
+    public String getStringImage() {
+        return stringImage;
+    }
+
+    public void setStringImage(String stringImage) {
+        this.stringImage = stringImage;
     }
 
     @Override

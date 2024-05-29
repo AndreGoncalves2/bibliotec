@@ -12,7 +12,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration
-        extends VaadinWebSecurity {
+        extends VaadinWebSecurity  {
 
     @Autowired
     private UserService userService;
@@ -32,4 +32,5 @@ public class SecurityConfiguration
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
     }
+    
 }

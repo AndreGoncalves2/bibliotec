@@ -33,6 +33,10 @@ public class CustomUpload extends Upload {
         return fileContentStream;
     }
 
+    public void setFileContentStream(InputStream fileContentStream) {
+        this.fileContentStream = fileContentStream;
+    }
+
     public String getFileName() {
         return fileName;
     }

@@ -203,6 +203,7 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
                 binder.createBinder();
                 binder.loadBean((I) Long.valueOf(parameter));
                 currentEntity = binder.getValue();
+                afterRead();
             } catch (BibliotecException | IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -212,6 +213,8 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
     public void setTitleParameter(String titleParameter) {
         this.titleParameter = titleParameter;
     }
+    
+    protected void afterRead(){}
 
     public Binder<T, I, C> getBinder() {
         return binder;

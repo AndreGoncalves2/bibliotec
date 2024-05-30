@@ -120,5 +120,9 @@ vaadin-button.return-button vaadin-icon {
 
 vaadin-text-area {
     overflow: auto;
-    max-height: 8rem;
+    /*max-height: 8rem;*/
+}
+
+vaadin-upload-file-list {
+    display: none;
 }

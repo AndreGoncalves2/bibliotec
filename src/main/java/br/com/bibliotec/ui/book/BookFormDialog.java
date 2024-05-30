@@ -10,16 +10,21 @@ import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.GenericFormDialog;
 import br.com.bibliotec.ui.componets.UploadPT;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.component.upload.SucceededEvent;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
+import com.vaadin.flow.server.StreamResource;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.InputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
@@ -39,7 +44,9 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
     private final TextArea txtsynopsis;
     
     private CustomUpload upload;
-    private MultiFileMemoryBuffer buffer;
+    private byte[] fileContentBytes;
+    private Image image;
+    private final Icon clearIcon;
 
     public BookFormDialog(@Autowired BookController controller) throws BibliotecException {
         super(controller, Book.class);
@@ -52,11 +59,20 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
         txtAuthor = new TextField("Autor");
         txtsynopsis = new TextArea("Sinopse");
         
+        clearIcon = VaadinIcon.CLOSE_BIG.create();
+        clearIcon.setVisible(false);
+        
         createBinder();
         
         createImageInput();
+
+        Div uploadDiv = new Div(upload);
+        uploadDiv.setClassName("upload-div");
+
+        clearIcon.addClickListener(event -> removeImage());
         
-        getFormLayout().add(upload, txtCode, txtTitle, txtAuthor, txtsynopsis);
+        uploadDiv.add(clearIcon);
+        getFormLayout().add(uploadDiv, txtCode, txtTitle, txtAuthor, txtsynopsis);
     }
 
     private void createImageInput() {
@@ -74,38 +90,47 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
         upload.setAcceptedFileTypes(".png", ".jpg", ".jpeg");
         upload.setMaxFiles(1);
         upload.addFileRemoveListener(this::removeImage);
-        upload.addSucceededListener(event -> insertImage(event, buffer));
+        upload.addSucceededListener(event -> renderImage());
         upload.setMaxFileSize(maxFileSizeInBytes);
         upload.addFileRejectedListener(event -> {
             ErrorDialog.show("Ops!", "A imagem que você está tentando carregar é muito grande. Por favor, selecione uma imagem com tamanho menor que 1MB.");
         });
     }
     
-    private void insertImage(SucceededEvent event, MultiFileMemoryBuffer buffer) {
-        String fileName = event.getFileName();
-        InputStream inputStream = buffer.getInputStream(fileName);
-        renderImage();
-    }
-    
+
     private void renderImage() {
-//        byte[] bytes = getBinder().getValue().getImage();
-//
-//        StreamResource resource = new StreamResource(
-//                "image.png",
-//                () -> new ByteArrayInputStream(bytes)
-//        );
-//        Image image = new Image(resource, "Imagem");
-//        image.setMaxWidth("5rem");
-//        image.setMaxHeight("5rem");
-//        image.getStyle().set("border-radius", ".3rem");
-//
-//        image.getStyle().set("vertical-align", "bottom");
-//        upload.setDropLabel(image);
+        String fileName = upload.getFileName();
+        try {
+            fileContentBytes = upload.getFileContentStream().readAllBytes();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        StreamResource resource = new StreamResource(fileName, () -> new ByteArrayInputStream(fileContentBytes));
+        createImage(resource);
     }
-    
+
     private void removeImage() {
-        upload.setDropLabel(new Span("Adicione a imagem do livro."));
-        getBinder().getValue().setStringImage(null);
+        upload.setDropLabel(new Span("Adicione uma imagem."));
+        upload.setFileContentStream(null);
+        upload.clearFileList();
+        clearIcon.setVisible(false);
+    }
+    private void createImage(StreamResource resource) {
+        try {
+            image = new Image(resource, "Imagem");
+
+            image.setMaxWidth("5rem");
+            image.setMaxHeight("5rem");
+            image.getStyle().set("border-radius", ".2rem");
+
+            image.getStyle().set("vertical-align", "bottom");
+            upload.setDropLabel(image);
+            clearIcon.setVisible(true);
+        } catch (Exception e ) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -115,9 +140,10 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
                 File directory = GlobalProperties.getDirectory();
                 String extension = FilenameUtils.getExtension(upload.getFileName());
                 String newFileName = UUID.randomUUID() + "." + extension;
+                
                 File outputFile = new File(directory + File.separator + newFileName);
-                Files.copy(upload.getFileContentStream(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
+                Files.copy(new ByteArrayInputStream(fileContentBytes), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                
                 getBinder().getValue().setStringImage(newFileName);
             } catch (Exception e) {
                 e.printStackTrace();

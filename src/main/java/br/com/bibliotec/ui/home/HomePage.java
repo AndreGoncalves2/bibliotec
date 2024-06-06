@@ -73,9 +73,9 @@ public class HomePage extends VerticalLayout {
     }
     
     private void createFastActions() throws  BibliotecException {
-        BookFormDialog bookForm = new BookFormDialog(bookController);
-        BookLoanFormDialog bookLoanForm = new BookLoanFormDialog(bookLoanController, bookController, studentController);
-        StudentFormDialog studentForm = new StudentFormDialog(studentController);
+        BookFormDialog bookForm = new BookFormDialog(bookController, userController);
+        BookLoanFormDialog bookLoanForm = new BookLoanFormDialog(bookLoanController, bookController, studentController, userController);
+        StudentFormDialog studentForm = new StudentFormDialog(studentController, userController);
         
         VerticalLayout fastActionsWrapper = new VerticalLayout();
         fastActionsWrapper.addClassName("fast-actions-layout");

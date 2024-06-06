@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
@@ -36,6 +38,10 @@ public class Book implements HasId<Long> {
     
     @Column(name = "string_image")
     private String stringImage;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -83,6 +89,14 @@ public class Book implements HasId<Long> {
 
     public void setStringImage(String stringImage) {
         this.stringImage = stringImage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

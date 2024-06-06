@@ -42,6 +42,10 @@ public class BookLoan implements HasId<Long> {
     @ManyToOne
     @JoinColumn(name = "student_ra")
     private Student student;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -89,6 +93,14 @@ public class BookLoan implements HasId<Long> {
 
     public void setStudent(Student student) {
         this.student = student;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

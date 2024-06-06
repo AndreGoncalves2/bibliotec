@@ -67,6 +67,7 @@ public class BookLoanGrid extends GenericGrid<BookLoan, BookLoanController> {
         grid.addComponentColumn(bookLoan -> createStatusIcon(bookLoan.getReturned())).setTextAlign(ColumnTextAlign.CENTER).setHeader("Devolvido").setWidth("1rem").setComparator(BookLoan::getReturned);
         grid.addComponentColumn(bookLoan -> lateInstallment(bookLoan) ? createStatusIcon(true) : createStatusIcon(false))
                 .setTextAlign(ColumnTextAlign.CENTER).setHeader("Atrasado").setComparator(BookLoanGrid::lateInstallment);
+        grid.addColumn(bookLoan -> bookLoan.getUser() != null ? bookLoan.getUser().getName() : "").setHeader("Criado Por");
         
         grid.setPartNameGenerator(bookLoan -> {
             if (lateInstallment(bookLoan)) return "late";

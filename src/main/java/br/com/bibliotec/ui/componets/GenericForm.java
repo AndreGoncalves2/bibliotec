@@ -132,7 +132,7 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
     }
 
     protected void handleSaveButton() {
-        beforeSave();
+        beforeSave(currentEntity);
         try {
             binder.writeBean(currentEntity);
             try {
@@ -150,9 +150,6 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         } catch (ValidationException e) {
             e.printStackTrace();
         }
-    }
-
-    protected void beforeSave() {
     }
 
     public void setDefaultRoute(String route) {
@@ -214,7 +211,8 @@ public class GenericForm<T extends HasId<I>, C extends GenericController<T, I, ?
         this.titleParameter = titleParameter;
     }
     
-    protected void afterRead(){}
+    protected void beforeSave(T currentEntity) {}
+    protected void afterRead() {}
 
     public Binder<T, I, C> getBinder() {
         return binder;

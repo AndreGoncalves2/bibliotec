@@ -18,7 +18,6 @@ public class StudentGrid extends GenericGrid<Student, StudentController> {
     public StudentGrid(@Autowired StudentController studentController) {
         super("ALUNOS", studentController);
         creatGrid();
-
     }
 
     private void creatGrid() {
@@ -28,6 +27,7 @@ public class StudentGrid extends GenericGrid<Student, StudentController> {
         grid.addColumn(Student::getRa).setHeader("RA").setFlexGrow(1).setSortable(true);
         grid.addColumn(Student::getName).setHeader("Nome").setFlexGrow(4).setSortable(true);
         grid.addColumn(Student::getStudentClass).setHeader("Classe").setFlexGrow(4).setSortable(true);
+        grid.addColumn(student -> student.getUser() != null ? student.getUser().getName() : "").setHeader("Criado Por");
 
         refresh();
     }

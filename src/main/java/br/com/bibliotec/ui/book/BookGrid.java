@@ -39,6 +39,7 @@ public class BookGrid extends GenericGrid<Book, BookController> {
         grid.addColumn(Book::getTitle).setHeader("Título").setWidth("15%").setSortable(true);
         grid.addColumn(Book::getAuthor).setHeader("Autor").setWidth("15%");
         grid.addColumn(Book::getSynopsis).setHeader("Sinopse").setWidth("40%");
+        grid.addColumn(book -> book.getUser() != null ? book.getUser().getName() : "").setHeader("Criado Por");
 
         refresh();
     }

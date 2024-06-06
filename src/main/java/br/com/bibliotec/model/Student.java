@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -32,6 +34,10 @@ public class Student implements HasId<Long> {
     @NotEmpty(message = "Campo obrigatório")
     @Column(name = "student_class", length = 60)
     private String studentClass;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -63,5 +69,13 @@ public class Student implements HasId<Long> {
 
     public void setStudentClass(String studentClass) {
         this.studentClass = studentClass;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

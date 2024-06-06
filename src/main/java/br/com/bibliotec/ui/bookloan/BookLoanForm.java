@@ -1,12 +1,16 @@
 package br.com.bibliotec.ui.bookloan;
 
 import br.com.bibliotec.anotation.Bind;
+import br.com.bibliotec.authentication.SecurityService;
+import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
+import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.model.Student;
+import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.DatePickerPT;
 import br.com.bibliotec.ui.componets.ErrorDialog;
@@ -35,15 +39,19 @@ public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Lon
 
     @Bind("student")
     private final ComboBox<Student> studentComboBox;
+    
     private final BookLoanController bookLoanController;
+    private final UserController userController;
 
     public BookLoanForm(@Autowired BookLoanController controller,
                         @Autowired BookController bookController,
-                        @Autowired StudentController studentController, 
-                        @Autowired BookLoanController bookLoanController) {
+                        @Autowired StudentController studentController,
+                        @Autowired BookLoanController bookLoanController,
+                        @Autowired UserController userController) {
         
         super(controller, BookLoan.class);
         this.bookLoanController = bookLoanController;
+        this.userController = userController;
         
         setTitleParameter("EMPRÉSTIMO");
 
@@ -88,5 +96,13 @@ public class BookLoanForm  extends GenericForm<BookLoan, BookLoanController, Lon
             ErrorDialog.show("Ops!", "Este livro está emprestado no momento.");
             bookComboBox.clear();
         }
+    }
+    
+    @Override
+    protected void beforeSave(BookLoan currentEntity) {
+        UserService userService = new UserService(userController);
+        User userLogged = userService.getLoggedUser();
+        
+        currentEntity.setUser(userLogged);
     }
 }

@@ -1,9 +1,12 @@
 package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.anotation.Bind;
+import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.config.GlobalProperties;
 import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.model.Book;
+import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.CustomUpload;
 import br.com.bibliotec.ui.componets.ErrorDialog;
@@ -55,9 +58,13 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
     private Image image;
     private CustomUpload upload;
     private byte[] fileContentBytes;
+    
+    private final UserController userController;
 
-    public BookForm(@Autowired BookController controller) {
+    public BookForm(@Autowired BookController controller,
+                    @Autowired UserController userController) {
         super(controller, Book.class);
+        this.userController = userController;
         
         setTitleParameter("LIVRO");
 
@@ -143,11 +150,23 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
     }
 
     @Override
-    protected void beforeSave() {
+    protected void beforeSave(Book currentEntity) {
         deleteOldFile();
-        
+
+        setNewFile(currentEntity);
+
+        setUser(currentEntity);
+    }
+
+    private void setUser(Book currentEntity) {
+        UserService userService = new UserService(userController);
+        User userLogged = userService.getLoggedUser();
+
+        currentEntity.setUser(userLogged);
+    }
+
+    private void setNewFile(Book currentEntity) {
         if (upload.getFileContentStream() != null) {
-            Book currentBook = getBinder().getValue();
             try {
                 File directory = GlobalProperties.getDirectory();
                 String extension = FilenameUtils.getExtension(upload.getFileName());
@@ -155,14 +174,14 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
                 
                 File outputFile = new File(directory + File.separator + newFileName);
                 Files.copy(new ByteArrayInputStream(fileContentBytes), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                
-                currentBook.setStringImage(newFileName);
+
+                currentEntity.setStringImage(newFileName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
     @Override
     protected void afterRead() {
         String newFileName = getBinder().getValue().getStringImage();

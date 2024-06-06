@@ -86,7 +86,7 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
     }
 
     public void handleSaveButton() {
-        beforeSave();
+        beforeSave(currentEntity);
         try {
             binder.writeBean(currentEntity);
         } catch (ValidationException e) {
@@ -110,8 +110,7 @@ public class GenericFormDialog<T extends HasId<I>, C extends GenericController<T
         }
     }
 
-    protected void beforeSave() {
-    }
+    protected void beforeSave(T currentEntity) {}
 
     public void resetBinder() throws BibliotecException {
         binder.readBean(null);

@@ -1,10 +1,13 @@
 package br.com.bibliotec.ui.book;
 
 import br.com.bibliotec.anotation.Bind;
+import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.config.GlobalProperties;
 import br.com.bibliotec.controller.BookController;
+import br.com.bibliotec.controller.UserController;
 import br.com.bibliotec.exeption.BibliotecException;
 import br.com.bibliotec.model.Book;
+import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.componets.CustomUpload;
 import br.com.bibliotec.ui.componets.ErrorDialog;
 import br.com.bibliotec.ui.componets.GenericFormDialog;
@@ -47,9 +50,14 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
     private byte[] fileContentBytes;
     private Image image;
     private final Icon clearIcon;
+    
+    private final UserController userController;
 
-    public BookFormDialog(@Autowired BookController controller) throws BibliotecException {
+    public BookFormDialog(BookController controller,
+                          UserController userController) throws BibliotecException {
         super(controller, Book.class);
+        this.userController = userController;
+        
         setTitle("Novo livro");
         
         txtCode = new TextField("Código");
@@ -134,7 +142,20 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
     }
 
     @Override
-    protected void beforeSave(){
+    protected void beforeSave(Book currentEntity){
+        setNewFile();
+
+        setUser(currentEntity);
+    }
+    
+    private void setUser(Book currentEntity) {
+        UserService userService = new UserService(userController);
+        User userLogged = userService.getLoggedUser();
+
+        currentEntity.setUser(userLogged);
+    }
+
+    private void setNewFile() {
         if (upload.getFileContentStream() != null) {
             try {
                 File directory = GlobalProperties.getDirectory();
@@ -149,5 +170,7 @@ public class BookFormDialog extends GenericFormDialog<Book, BookController, Long
                 e.printStackTrace();
             }
         }
-    };
+    }
+
+    ;
 }

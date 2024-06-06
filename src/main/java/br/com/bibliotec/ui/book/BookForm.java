@@ -78,6 +78,7 @@ public class BookForm extends GenericForm<Book, BookController, Long> {
         setDefaultRoute("/livro");
 
         clearIcon.addClickListener(event -> removeImage());
+        clearIcon.setVisible(false);
         
         uploadDiv.add(clearIcon);
         getFormLayout().add(uploadDiv, txtCode, txtTitle, txtAuthor, txtSynopsis);

@@ -12,7 +12,6 @@ public class DatePickerPT extends DatePicker {
     
     public DatePickerPT(String label) {
         super(label);
-        
         defineI18n();
     }
     
@@ -23,6 +22,7 @@ public class DatePickerPT extends DatePicker {
         ptBrI18n.setWeekdaysShort(List.of("Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"));
         ptBrI18n.setToday("Hoje");
         ptBrI18n.setCancel("Cancelar");
+        ptBrI18n.setDateFormat("dd/MM/yyyy");
         setI18n(ptBrI18n);
     }
 }

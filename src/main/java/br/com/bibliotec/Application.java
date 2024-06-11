@@ -11,7 +11,7 @@ import java.io.File;
 
 @SpringBootApplication
 @PropertySources({
-        @PropertySource(value = "file:C:/bibliotec.properties", ignoreResourceNotFound = true), // Windows
+        @PropertySource(value = "file:C:/bibliotec/bibliotec.properties", ignoreResourceNotFound = true), // Windows
         @PropertySource(value = "file:/etc/bibliotec.properties", ignoreResourceNotFound = true) // Linux
 })
 public class Application {

@@ -1,37 +1,47 @@
 package br.com.bibliotec.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import br.com.bibliotec.interfaces.HasId;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 @Table
 @Entity(name = "book")
-public class Book {
+public class Book implements HasId<Long> {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    
-    @NotBlank
+
+    @NotEmpty(message = "Campo obrigatório")
+    @Column(name = "code", updatable = false)
+    private String code;
+
+    @NotEmpty(message = "Campo obrigatório")
     @Column(name = "title", length = 100)
     private String title;
     
     @Column(name = "author", length = 60)
     private String author;
-    
-    @NotNull
-    @Column(name = "number_pages")
-    private int numberPages;
 
-    @NotNull
-    @Column(name = "image", columnDefinition = "mediumblob")
-    private byte[] imagem;
-
-    @Length(max = 1000)
-    @Column(name = "synopsis",length = 1000)
+    @Length(max = 1000, message = "Limite de 1000 caracteres excedido.")
+    @Column(name = "synopsis", length = 1000)
     private String synopsis;
+    
+    @Column(name = "string_image")
+    private String stringImage;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -39,6 +49,14 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String id) {
+        this.code = id;
     }
 
     public String getTitle() {
@@ -57,27 +75,36 @@ public class Book {
         this.author = author;
     }
 
-    public int getNumberPages() {
-        return numberPages;
-    }
-
-    public void setNumberPages(int numberPages) {
-        this.numberPages = numberPages;
-    }
-
-    public byte[] getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(byte[] imagem) {
-        this.imagem = imagem;
-    }
-
     public String getSynopsis() {
         return synopsis;
     }
 
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
+    }
+
+    public String getStringImage() {
+        return stringImage;
+    }
+
+    public void setStringImage(String stringImage) {
+        this.stringImage = stringImage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "code=" + code +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                '}';
     }
 }

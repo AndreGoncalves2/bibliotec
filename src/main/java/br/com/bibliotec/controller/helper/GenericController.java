@@ -2,11 +2,13 @@ package br.com.bibliotec.controller.helper;
 
 
 import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.interfaces.HasId;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public class GenericController<T, I, R extends JpaRepository<T, I>> {
+public class GenericController<T extends HasId<I>, I  , R extends JpaRepository<T, I>> {
 
     protected  R repository;
 
@@ -20,10 +22,10 @@ public class GenericController<T, I, R extends JpaRepository<T, I>> {
 
     protected void validate(T entity, Mode mode) throws BibliotecException {}
 
-    protected void afterExecute(T entity, Mode mode) throws BibliotecException {}
+    protected void afterExecute(T entity, Mode mode) {}
 
     public List<T> list() {
-        return repository.findAll().reversed();
+        return repository.findAll();
     }
 
     public T save(T entity) throws BibliotecException {
@@ -61,9 +63,11 @@ public class GenericController<T, I, R extends JpaRepository<T, I>> {
 
         try {
             repository.delete(entity);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (DataIntegrityViolationException e) {
+            e.printStackTrace();
+            throw new BibliotecException("Desculpe, a exclusão falhou devido a registros relacionados. Remova as ligações primeiro.");
         }
+
         afterExecute(entity, Mode.DELETE);
     }
 }

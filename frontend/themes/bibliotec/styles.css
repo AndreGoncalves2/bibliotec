@@ -1,0 +1,90 @@
+@import "../../../src/main/resources/public/frontend/header.css";
+@import "../../../src/main/resources/public/frontend/grid.css";
+@import "../../../src/main/resources/public/frontend/homePage.css";
+@import "../../../src/main/resources/public/frontend/login.css";
+@import "../../../src/main/resources/public/frontend/form.css";
+@import "../../../src/main/resources/public/frontend/settingsPage.css";
+@import "../../../src/main/resources/public/frontend/pageTitle.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --lumo-tint-10pct: rgba(0, 0, 0, 0.1);
+    --lumo-body-text-color: black;
+    --vaadin-grid-cell-background: white;
+    --lumo-base-color: white;
+    --blue-color: #082A5C;
+    --black-color: #262626;
+    --background-color: #B1CDE7;
+    --box-shadown: #1E1E1E;
+    --button-hover-color: rgba(8, 42, 92, 0.95);
+    
+    --text-black-color: #1A1A1A;
+    --text-home-black-color: #333333;
+    --text-blue-color: #43499F;
+    
+    --lumo-contrast-60pct: var(--blue-color);
+    --lumo-secondary-text-color: --lumo-body-text-color;
+    --lumo-primary-text-color:  #43499F;
+    --vaadin-input-field-placeholder-color: rgba(0, 0, 0, 0.3);
+    
+    font-size: 14px;
+}
+
+body {
+    background-color: var(--background-color);
+    font-family: "Montserrat", sans-serif;
+}
+
+vaadin-dialog-overlay > [slot="title"] {
+    color: var(--black-color);
+}
+
+vaadin-button:hover {
+    cursor: pointer;
+}
+
+.error-dialog vaadin-button {
+    align-self: end;
+    font-weight: bold;
+    
+    color: white;
+    border: 1px solid var(--black-color);
+    background-color: var(--blue-color);
+    
+
+    transition: 0.3s;
+}
+
+.error-dialog vaadin-button:hover {
+    cursor: pointer;
+}
+
+.error-dialog vaadin-vertical-layout {
+    padding: 0;
+}
+
+.error-dialog h2 {
+    color: #DE241A;
+}
+
+.error-dialog p {
+    color: #000;
+    font-size: 1.2rem;
+}
+
+.upload-div {
+    position: relative;
+}
+
+.upload-div vaadin-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    
+    height: .9rem;
+    width: .9rem;
+    color: black;
+    
+    cursor: pointer;
+}

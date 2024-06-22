@@ -1,0 +1,97 @@
+
+.default-form-layout {
+    align-items: center;
+    padding-top: 2rem;
+}
+
+.card-default-form {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    max-width: 40rem;
+    background-color: var(--blue-color);
+    border: 1px solid var(--black-color);
+    border-radius: .6rem;
+}
+
+.card-default-form h2 {
+    width: 100%;
+    padding-block: 1.5rem .5rem;
+    text-align: center;
+
+    font-weight: bold;
+    font-size: 2.5rem;
+
+    border-bottom: 2px solid var(--text-blue-color);
+    color: var(--background-color);
+}
+
+.form-layout {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-direction: column;
+}
+
+.form-layout vaadin-text-field,
+.form-layout vaadin-password-field {
+    width: 70%;
+    font-size: 1.2rem;
+}
+
+.form-layout vaadin-text-field vaadin-icon,
+.form-layout vaadin-password-field vaadin-icon {
+    width: 10%;
+    margin-right: 1rem;
+    border-right: 1px solid var(--black-color);
+    color: var(--black-color);
+}
+
+.form-layout vaadin-password-field::part(input-field){
+    background-color: white;
+    border: 1px solid var(--black-color);
+}
+
+.form-layout vaadin-password-field::part(reveal-button) {
+    color: var(--black-color);
+}
+
+.form-layout vaadin-button {
+    background-color: var(--background-color);
+    border-radius: .9rem;
+    width: 70%;
+    font-weight: bold;
+    font-size: 1.3rem;
+    padding-block: 1.3rem;
+    transition: 0.3s;
+}
+
+.form-layout vaadin-button:hover {
+    background-color: rgba(177,205,231, .9);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.form-layout .btn-login {
+    margin-top: 1rem;
+}
+
+/*CONFIG PAGE*/
+
+.link-container {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+
+    color: var(--text-home-black-color);
+    border-bottom: 1px solid var(--black-color);
+    margin-left: 30%;
+
+    width: 30%;
+}
+
+.link-container span:hover {
+    cursor: pointer;
+}
+
+

@@ -1,0 +1,143 @@
+H5,
+H4{
+    font-size: 1rem;
+    margin-inline: auto;
+    color: var(--text-home-black-color);
+}
+
+
+
+.message-wrapper {
+    margin: 1.3rem 2.5rem 2.5rem 2.5rem;
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+
+    padding-block: .6rem;
+
+    border-radius: .3rem;
+    width: 25%;
+
+    background-color: white;
+    border: 1px solid var(--black-color)
+}
+
+.message-wrapper h4 {
+    font-size: .8rem;
+}
+
+.cards-wrapper {
+    width: 100%;
+    justify-content: center;
+}
+
+.home-cards {
+    cursor: pointer;
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 2.5rem;
+
+    border-radius: .3rem;
+
+    background-color: white;
+    border: 1px solid var(--black-color);
+    box-shadow: 2px 2px 7px .1px var(--box-shadown);
+}
+
+.home-cards h4 {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.home-cards div {
+    display: flex;
+    position: absolute;
+    top: -1.2rem;
+    left: 1rem;
+
+    padding: .5rem .5rem;
+
+    background-color: var(--background-color);
+    border-radius: .5rem;
+    border: 1px solid var(--black-color);
+
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.home-cards:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+}
+
+.home-cards div vaadin-icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.fast-actions-message-layout {
+    margin-top: 3rem;
+    width: 100%;
+    gap: .5rem;
+    justify-content: center;
+}
+
+.fast-actions-message-layout h2:nth-child(1) {
+    font-size: 2rem;
+    color: var(--text-black-color);
+}
+
+.fast-actions-message-layout h2:nth-child(2) {
+    font-size: 2rem;
+    color: var(--blue-color);
+}
+
+.fast-actions-layout {
+    align-items: center;
+    justify-content: center;
+}
+
+.fast-actions-layout .fast-action {
+    padding: 1rem 1rem;
+    border-radius: .3rem;
+    width: 50rem;
+
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: var(--blue-color);
+    border: 1px solid var(--black-color)
+}
+
+.fast-actions-layout .fast-action h4 {
+    margin: 0;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.fast-actions-layout .fast-action div {
+    padding: .2rem;
+    display: flex;
+    border-radius: .3rem;
+    border: 1px solid var(--black-color);
+    background-color: white;
+   }
+.fast-action {
+    transition: transform 0.2s, box-shadow 0.2s;    
+}
+
+.fast-action:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.fast-actions-layout .fast-action div vaadin-icon {
+    cursor: pointer;
+
+    width: 1rem;
+    height: 1rem;
+}

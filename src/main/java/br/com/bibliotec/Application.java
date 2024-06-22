@@ -1,23 +1,29 @@
 package br.com.bibliotec;
 
-import com.vaadin.flow.component.page.AppShellConfigurator;
-import com.vaadin.flow.theme.Theme;
+import br.com.bibliotec.config.GlobalProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.PropertySources;
 
-/**
- * The entry point of the Spring Boot application.
- *
- * Use the @PWA annotation make the application installable on phones, tablets
- * and some desktop browsers.
- *
- */
+import java.io.File;
+
 @SpringBootApplication
-@Theme(value = "mytodo")
-public class Application implements AppShellConfigurator {
-
+@PropertySources({
+        @PropertySource(value = "file:C:/bibliotec/bibliotec.properties", ignoreResourceNotFound = true), // Windows
+        @PropertySource(value = "file:/etc/bibliotec.properties", ignoreResourceNotFound = true) // Linux
+})
+public class Application {
+    
+    public Application(@Autowired GlobalProperties globalProperties) {
+        File directory = GlobalProperties.getDirectory();
+        if (!directory.exists()){
+            directory.mkdirs();
+        }
+    }
+    
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-
 }

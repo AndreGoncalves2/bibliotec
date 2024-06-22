@@ -1,0 +1,20 @@
+.div-page-title {
+    display: flex;
+    justify-content: center;
+    
+    margin-top: 1.2rem;
+    margin-inline: auto;
+    padding-block: .6rem;
+    
+    border-radius: .3rem;
+    width: 25%;
+    
+    background-color: white;
+    border: 1px solid var(--black-color)
+}
+
+h2 {
+    font-size: 1.3rem;
+    color: var(--text-black-color);
+    font-weight: bold;
+}

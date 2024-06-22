@@ -1,0 +1,39 @@
+.button-form {
+    font-weight: bold;
+    color: #FFFFFF;
+    border: 1px solid var(--black-color);
+    background-color: var(--blue-color);
+    
+    padding: 1.6rem 2.6rem;
+    margin-top: 3rem;
+
+    transition: 0.3s;
+}
+
+.button-form:hover {
+    background-color: var(--button-hover-color);
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+vaadin-text-field::part(input-field){
+    background-color: white;
+    border: 1px solid var(--text-black-color);
+}
+
+vaadin-text-field vaadin-icon {
+    color: var(--text-black-color);
+}
+
+vaadin-grid {
+    border: 1px solid var(--text-black-color);
+    box-shadow: 2px 2px 7px .6px var(--box-shadown);
+}
+
+vaadin-grid::part(header-cell) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+vaadin-grid.grid::part(late) {
+    background-color: rgba(255, 0, 0, 0.2);
+}

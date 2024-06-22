@@ -1,0 +1,124 @@
+.header-container {
+    align-items: center;
+    background-color: var(--background-color);
+}
+
+.div-links-container-end {
+    gap: 0;
+    justify-content: space-between;
+}
+
+.buttons-container {
+    border-radius: 15px;
+    justify-content: space-between;
+    width: 100%;
+
+    border-block: 1px solid var(--black-color);
+    background-color: var(--blue-color);
+}
+
+.title-container {
+    width: 100%;
+    padding-block: .5rem;
+    border-radius: .25rem;
+
+    border: 1px solid var(--black-color);
+    background-color: white;
+}
+
+.header-container h4 {
+    font-size: 1rem;
+    color: var(--text-black-color);
+    text-align: center;
+    width: 100%;
+}
+
+.div-links-start {
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+.div-links-start a,
+.div-links-right a,
+.div-link-config a {
+    font-size: .9rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--black-color);
+    padding: .6rem 3rem;
+}
+
+.div-links-right,
+.div-links-start,
+.div-link-config {
+    padding-block: .6rem;
+    border-left: 1px solid var(--black-color);
+    background-color: white;
+}
+
+.disabled {
+    background-color: #f5f5f5;
+    color: #a0a0a0;
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.disabled a:hover {
+    cursor: not-allowed;
+}
+
+
+.div-link-config {
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    border-right: 1px solid var(--black-color);
+}
+
+.div-links-start {
+    border-right: 1px solid var(--black-color);
+}
+
+.school-name-container {
+    position: relative;
+}
+
+.school-name-container::after {
+    content: "";
+    position: absolute;
+    bottom: -.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    height: 1px;
+    background-color: var(--black-color);
+}
+
+.title-start {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+    color: var(--text-black-color);
+}
+
+.title-end {
+    font-size: 2.5rem;
+    margin-top: 1rem;
+    color: var(--text-blue-color);
+}
+
+.div-selected {
+    background-color:  rgba(8, 42, 92, 0.95);
+}
+
+.div-links-start.div-selected {
+    border-right-color: rgb(160, 160, 160) ;
+}
+
+.div-links-right.div-selected {
+    border-left-color: rgb(160, 160, 160)
+}
+
+
+.div-selected a {
+    color: #FFFFFF;
+}
+

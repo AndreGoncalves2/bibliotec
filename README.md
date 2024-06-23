@@ -1,12 +1,12 @@
 <h1 align="center"> Bibliotec 📓</h1>
 
-  https://github.com/AndreGoncalves2/bibliotec/assets/106348438/d434fd97-75af-4e72-bceb-44b7f638a5f4
+https://github.com/AndreGoncalves2/bibliotec/assets/106348438/59c47413-854a-415e-98cf-1f8c4f54ef15
 
 ## 🚀 Tecnologias
 
 - **Java 21**: A linguagem robusta e versátil usada para o backend.
 
-- **Spring Boot 3.2.3**: Spring Boot 3.2.3 é uma versão do popular framework Spring que oferece melhorias em desempenho e funcionalidades para desenvolvimento ágil de aplicações Java.
+- **Spring Boot 3.2.3**: É uma versão do popular framework Spring que oferece melhorias em desempenho e funcionalidades para desenvolvimento ágil de aplicações Java.
 
 - **Vaadin 24.3.7**: Vaadin é um framework open-source para construção de interfaces de usuário web em Java.
 
@@ -14,12 +14,16 @@
 
 - **JPA (Java Persistence API)**: Uma especificação do Java EE que define um padrão de mapeamento objeto-relacional para persistência de dados em aplicações Java.
 
+## Diagrama de classes
+![bibliotec-diagrama-dark](https://github.com/AndreGoncalves2/bibliotec/assets/106348438/4ca5ad96-d6c3-4084-a271-7007607bf0be)
+
+
+
 ## 💻 Projeto
 
 Sistema de biblioteca que permite gerenciar registros de livros e alunos, além de possibilitar empréstimos.
 
 ## Principais funcionalidades:
-### Usuários Comum
 - **Registrar alunos:** Registra informações dos alunos, como número de matrícula, nome e turma.
 - **Registrar livros:** Registra informações dos livros, como imagem da capa, código do livro, título, autor e sinopse.
 - **Registrar empréstimo de livros:** Registra informações dos empréstimos, como aluno, livro, data do empréstimo e data do vencimento. 
@@ -64,7 +68,7 @@ mvn clean package -Pproduction -Dvaadin.force.production.build=true -DskipTests=
 ```shell
 cd target/
 ```
--Inicie o servidor de desenvolvimento:
+- Inicie o servidor de desenvolvimento:
 
 ```shell
 java -jar biblio-tec-0.0.1.jar

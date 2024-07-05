@@ -4,7 +4,7 @@ import br.com.bibliotec.anotation.Bind;
 import br.com.bibliotec.authentication.SecurityService;
 import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.controller.UserController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.ErrorDialog;

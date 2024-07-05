@@ -5,7 +5,7 @@ import br.com.bibliotec.authentication.UserService;
 import br.com.bibliotec.config.GlobalProperties;
 import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.UserController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.componets.CustomUpload;
@@ -23,7 +23,6 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.server.StreamResource;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

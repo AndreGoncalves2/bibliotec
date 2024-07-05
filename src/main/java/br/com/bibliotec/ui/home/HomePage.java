@@ -6,7 +6,7 @@ import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
 import br.com.bibliotec.controller.UserController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.book.BookFormDialog;

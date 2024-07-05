@@ -2,7 +2,7 @@ package br.com.bibliotec.ui.helper;
 
 import br.com.bibliotec.anotation.Bind;
 import br.com.bibliotec.controller.helper.GenericController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.interfaces.HasId;
 import com.vaadin.flow.component.HasValue;
 import com.vaadin.flow.data.binder.BeanValidationBinder;

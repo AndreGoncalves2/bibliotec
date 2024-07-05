@@ -6,7 +6,7 @@ import br.com.bibliotec.controller.BookController;
 import br.com.bibliotec.controller.BookLoanController;
 import br.com.bibliotec.controller.StudentController;
 import br.com.bibliotec.controller.UserController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.model.Student;
@@ -14,7 +14,6 @@ import br.com.bibliotec.model.User;
 import br.com.bibliotec.ui.componets.DatePickerPT;
 import br.com.bibliotec.ui.componets.GenericFormDialog;
 import com.vaadin.flow.component.combobox.ComboBox;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package br.com.bibliotec.exeption;
+package br.com.bibliotec.exception;
 
 public class BibliotecException extends Exception {
 

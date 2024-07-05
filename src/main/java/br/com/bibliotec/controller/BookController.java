@@ -1,7 +1,7 @@
 package br.com.bibliotec.controller;
 
 import br.com.bibliotec.controller.helper.GenericController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.model.Book;
 import br.com.bibliotec.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;

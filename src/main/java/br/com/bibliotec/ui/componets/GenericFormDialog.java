@@ -1,7 +1,7 @@
 package br.com.bibliotec.ui.componets;
 
 import br.com.bibliotec.controller.helper.GenericController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.interfaces.HasId;
 import br.com.bibliotec.ui.helper.Binder;
 import com.vaadin.flow.component.button.Button;

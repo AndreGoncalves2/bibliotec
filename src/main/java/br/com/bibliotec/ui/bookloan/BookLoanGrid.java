@@ -1,7 +1,7 @@
 package br.com.bibliotec.ui.bookloan;
 
 import br.com.bibliotec.controller.BookLoanController;
-import br.com.bibliotec.exeption.BibliotecException;
+import br.com.bibliotec.exception.BibliotecException;
 import br.com.bibliotec.model.BookLoan;
 import br.com.bibliotec.ui.MainView;
 import br.com.bibliotec.ui.componets.GenericGrid;
